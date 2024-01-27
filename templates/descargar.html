@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+{% block title %}DESCARGA-YOUTUBE{% endblock %}
+<div class="jumbotron">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="row modal-title">
+                <div class="col-xl-12">
+                    <div class="row">
+                        <h3 id="estado">
+                        </h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-9">
+                            <h3 id="titulo">
+                            </h3>
+                        </div>
+                        <div class="col-xl-3">
+                            <h3 id="progreso" style="text-align: right;">
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-control">
+                    {{ form.url.errors }}
+                    <legend for="{{ form.url.id_for_label }}">
+                        URL: {{ form.url }}
+                    </legend>
+                </div>
+                {% if ocupada %} OCUPADA {% endif %}
+                <br>
+                    <div class="form-control">
+                        <legend>
+                            Formato:
+                        </legend>
+                        {% for radio in form.formato %}
+                        <label class="text">
+                            {{ radio.tag }} {{ radio.choice_label }}
+                        </label>
+                        <br>
+                            {% endfor %}
+                        </br>
+                    </div>
+                    <br>
+                        <div class="modal-footer">
+                            <input class="btn btn-success descargar" name="descargar" type="submit" value="DESCARGAR"/>
+                        </div>
+                    </br>
+                </br>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!--<script type="text/javascript">
+        window.onload=function() {
+            setInterval(function(){ 
+                var des_url = $("#id_url").val();
+                var request = $.ajax({
+                type: "POST",
+                url: "{% url 'datos' %}",
+                data: {"dir_url":des_url},
+            });
+            request.done(function(datos) {
+                console.log("ok-info")
+                $("#estado").html(datos.label);
+                $("#titulo").html(datos.titulo);
+                $("#progreso").html(datos.progreso);
+              });
+             }, 1000);
+        };
+    </script>-->
+{% endblock %}

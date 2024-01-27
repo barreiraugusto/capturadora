@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {% load static %}
+    <!--<meta charset="utf-8">-->
+
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
+
+    <!-- Bootstrap -->
+    <!--<link href="{% static 'capturadora/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">-->
+
+    <!-- Fonts -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <!-- Styles -->
+    <link href="{% static 'capturadora/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+    <!-- Celular -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock %}"/>
+    {% block head %} {% endblock %}
+    <script>
+        $(document).ready(function() {
+            $("#id_tipo_grabacion_1").click(function() {
+                $("#segmento").css("visibility", "visible");
+            });
+            $("#id_tipo_grabacion_0").click(function() {
+                $("#segmento").css("visibility", "hidden");
+
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+{% block content %} {% endblock %}
+{% block scripts %}
+<!-- Bootstrap -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'capturadora/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+{% endblock %}
+{% block extrajs %}
+{% endblock extrajs %}
+
+</body>
+
+</html>
