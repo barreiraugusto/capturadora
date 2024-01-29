@@ -23,15 +23,15 @@
   /*EJEMPLO AJAX HACIA DJANGO*/
           //token
         setInterval(function chequeo_carton(){
-          var csrftoken = getCookie('csrftoken');
+          var contenidoHTML = '';
+//          var csrftoken = getCookie('csrftoken');
           $.ajax({
-                    url: 'capturaweb',
+                    url: 'get_tiempo',
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
-                        for (var i = 0; i < data.tiempos.length; i++) {
-                            $('#tiempos-container').append('<p>' + data.tiempos[i] + '</p>');
-                        }
+                    for (var i = 0; i < data.tiempos.length; i++) {
+                        contenidoHTML += data.tiempos[i];
                     }
+                    $('#tiempos-container').html('<p>' + contenidoHTML + '</p>');
                 });
         },1000)

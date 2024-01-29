@@ -1,19 +1,24 @@
 {% extends "capturaweb/base.html" %} {% load static %}
 {% block content %}
-{% block title %}GRABADORA 1{% endblock %}
 <div class="jumbotron">
     <div class="modal-content">
         <div class="modal-body">
-            <h3 class="">
-                {% if ocupada %}
-                <label class="text-danger">GRABANDO: {{ nombre }}</label>
-                {% else %}
-                <label class="text-success">ESPERANDO</label>
-                {% endif %}
-                <h1>Tiempos Generados</h1>
-    <div id="tiempos-container"></div>
+            <div class="row">
+                <div class="modal-title col-lg-8 col-sm-12">
+                    <h3>
+                        {% if ocupada %}
+                        <label class="text-danger">GRABANDO: {{ nombre }}</label>
+                        {% else %}
+                        <label class="text-success" style="display: inline;">ESPERANDO </label>
+                        {% endif %}
+                    </h3>
+                </div>
 
-            </h3>
+                <div class="modal-title text-center col-lg-4 col-sm-12">
+                    <span id="tiempos-container" class="text-danger h1"></span>
+                </div>
+
+            </div>
             <form method="post">
                 {% csrf_token %}
                 <div class="row modal-title">
@@ -23,9 +28,9 @@
                             {{ form.nombre }}
                         </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-lg-3 col-sm-12">
                         <div class=" mt-2">
-                            <legend>Tipo de Grabacion</legend>
+                            <legend>Grabacion</legend>
 
                             {% for radio in form.tipo_grabacion %}
                             <div class="form-check">
@@ -39,7 +44,7 @@
 
                         </div>
                     </div>
-                    <div class="col-3 p-b-5">
+                    <div class="col-lg-3 col-sm-12 p-b-5">
                         <div class=" mt-2">
                             <legend>Convertir</legend>
                             {% for radio_convertir in form.convertir %}
@@ -64,20 +69,22 @@
 </div>
 {% endblock %}
 {% block extrajs %}
-<script src="{% static 'js/leer.js' %}"></script>
+<!--<script src="{% static 'js/leer.js' %}"></script>-->
 {% endblock extrajs %}
 {% block scripts %}
 <script>
     $(document).ready(function() {
         function actualizarTiempos() {
+        var contenidoHTML = '';
             $.ajax({
-                url: 'capturaweb',  // Reemplaza con la URL de tu vista
+                url: 'get_tiempo',
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     for (var i = 0; i < data.tiempos.length; i++) {
-                        $('#tiempos-container').append('<p>' + data.tiempos[i] + '</p>');
+                        contenidoHTML += data.tiempos[i];
                     }
+                    $('#tiempos-container').html('<p>' + contenidoHTML + '</p>');
                 }
             });
         }
