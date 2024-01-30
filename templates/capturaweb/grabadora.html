@@ -1,6 +1,7 @@
 {% extends "capturaweb/base.html" %} {% load static %}
+{% block title %}CAPTURADORA 1{% endblock %}
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron" xmlns="http://www.w3.org/1999/html">
     <div class="modal-content">
         <div class="modal-body">
             <div class="row">
@@ -15,7 +16,7 @@
                 </div>
 
                 <div class="modal-title text-center col-lg-4 col-sm-12">
-                    <span id="tiempos-container" class="text-danger h1"></span>
+                    <h1 id="tiempos-container" class="text-danger display-2">00:00:00</h1>
                 </div>
 
             </div>
@@ -58,8 +59,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" class="btn btn-danger" value="REC " name="rec"/>
-                    <input type="submit" class="btn btn-default" value="STOP" name="stop"/>
+                    <button type="submit" class="btn btn-default btn-custom" name="rec"> </button>
+                    <button type="submit" class="btn btn-default btn-square" name="stop"> </button>
 
                 </div>
         </div>
