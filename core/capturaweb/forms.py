@@ -1,22 +1,26 @@
 from django import forms
 
-TIPO = ((1, "CONTINUA"), (2, "SEGMENTADA"))
-CONVERTIR = ((1, "SI"), (2, "NO"))
+from core.capturaweb.models import Grabacion
+
 FORMATO = ((1, "AUDIO-VIDEO"), (2, "AUDIO"))
 
 
-class DatosGrabacionForm(forms.Form):
-    nombre = forms.CharField(max_length=100, required=True)
-    tipo_grabacion = forms.ChoiceField(widget=forms.RadioSelect, choices=TIPO, required=True, initial="1")
-    segmento = forms.CharField(max_length=4, initial=10, required=False)
-    convertir = forms.ChoiceField(widget=forms.RadioSelect, choices=CONVERTIR, required=True, initial="2")
+class DatosGrabacionForm(forms.ModelForm):
+    TIPO = ((1, "CONTINUA"), (2, "SEGMENTADA"))
+    CONVERTIR = ((True, "SI"), (False, "NO"))
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
-        self.fields['tipo_grabacion'].widget.attrs.update({'class': 'form-control'})
-        self.fields['segmento'].widget.attrs.update({'class': 'form-control mt-2', 'id': 'segmento'})
-        self.fields['convertir'].widget.attrs.update({'class': 'form-check-input'})
+    tipo_grabacion = forms.ChoiceField(choices=TIPO, initial='1',
+                                       widget=forms.RadioSelect(attrs={'class': 'form-check'}))
+    convertida = forms.ChoiceField(choices=CONVERTIR, initial=False,
+                                   widget=forms.RadioSelect(attrs={'class': 'form-check'}))
+    segmento = forms.CharField(max_length=4, initial=10, required=False)
+
+    class Meta:
+        model = Grabacion
+        fields = ['titulo', 'convertida', 'tipo_grabacion']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class DescargaForm(forms.Form):

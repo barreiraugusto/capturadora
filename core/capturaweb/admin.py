@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from core.capturaweb.models import Grabacion
+
+
+class GrabacionAdmin(admin.ModelAdmin):
+    list_display = ['titulo', 'duracion', 'convertida', 'segmentada']
+
+
+admin.site.register(Grabacion, GrabacionAdmin)

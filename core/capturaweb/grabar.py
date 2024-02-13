@@ -1,46 +1,58 @@
 import os
+import subprocess
 import threading
 import time
 from datetime import date
 from datetime import datetime
 
 
+def get_hora():
+    ahora = datetime.now()
+    return f"{ahora.hour}-{ahora.minute}-{ahora.second}"
+
+
 class Captura:
     def __init__(self):
-        self.ahora = datetime.now()
         self.hoy = date.today()
         self.nombre = "Nada"
         self.segmento = 10
         self.capturarlo = False
         self.capturarlo_seg = False
-        self.hora = f"{self.ahora.hour}-{self.ahora.minute}-{self.ahora.second}"
-        self.dia = f"{self.hoy.day}-{self.hoy.month}-{self.hoy.year}"
-        self.esta = os.path.isdir(f"/media/video/Captura_{self.dia}")
-        # self.pid = self.proceso.split()[1]
-        if not self.esta:
-            os.system(f"mkdir /media/video/Captura_{self.dia}")
-            time.sleep(.5)
-            os.system(f"chmod 777 /media/video/Captura_{self.dia}")
-            time.sleep(1)
-            os.system(f"mkdir /media/video/Captura_{self.dia}/OV")
-            time.sleep(.5)
-            os.system(f"chmod 777 /media/video/Captura_{self.dia}/OV")
-        else:
-            pass
+        self.dia = self.hoy.strftime("%d-%m-%Y")
+        self.crear_directorio_captura()
         self.th_capturar = threading.Thread(target=self.capturar)
         self.th_capturar.start()
+
+        self.proceso = None
+        self.pid = None
 
         self.th_capturar_segmentada = threading.Thread(target=self.captura_segmentada)
         self.th_capturar_segmentada.start()
 
+    def crear_directorio_captura(self):
+        ruta_directorio = f"/media/video/Captura_{self.dia}"
+        if not os.path.exists(ruta_directorio):
+            os.makedirs(ruta_directorio)
+            os.chmod(ruta_directorio, 0o777)
+            os.makedirs(f"{ruta_directorio}/OV")
+            os.chmod(f"{ruta_directorio}/OV", 0o777)
+
     def pid_proceso(self):  # saco el ID del proceso de ffmpeg que esta ocupando la placa DeckLink
-        comando = os.popen("ps aux | grep ffmpeg | grep DeckLink").read()
-        lista_comando = comando.split()
-        self.pid = lista_comando[1]
-        if "decklink" in lista_comando:
+        # comando = os.popen("ps aux | grep ffmpeg | grep DeckLink").read()
+        script = "gen_tiempo.sh"
+        try:
+            self.pid = int(subprocess.check_output(["pgrep", "-f", script]))
             return self.pid
-        else:
-            return False
+        except subprocess.CalledProcessError:
+        # resultado = os.popen("ps aux | grep get_tiempo | grep /bin/bash").read()
+        # lista_comando = resultado.split()
+        # print(f'Lista ==== {lista_comando}')
+        # self.pid = lista_comando[1]
+        # if "decklink" in lista_comando:
+        # if "gen_tiempo" in lista_comando:
+        #     return self.pid
+        # else:
+        #     return False
 
     def en_proceso(self):  # devuelve True o False dependiendo de si el proceso esta en ejecucion o no
         proceso = self.pid_proceso()
@@ -52,7 +64,8 @@ class Captura:
 
     def para_capturar(self, nombre):
         self.nombre = nombre
-        self.capturarlo = True
+        self.proceso = subprocess.Popen(['/home/augusto/Documentos/CODIGOS/gen_tiempo.sh'])
+        # self.capturarlo = True
 
     def para_captura_segmentada(self, nombre, segmento=10):
         self.segmento = segmento
@@ -67,7 +80,6 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        self.hora = f"{self.ahora.hour}-{self.ahora.minute}-{self.ahora.second}"
                         os.system(f"/opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i 'DeckLink SDI 4K@8'\
                                  -pix_fmt yuv420p\
                                  -crf 20\
@@ -95,7 +107,7 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        self.hora = f"{self.ahora.hour}-{self.ahora.minute}-{self.ahora.second}"
+                        hora = get_hora()
                         os.system(f"/opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i 'DeckLink SDI 4K@8'\
         						-strict -2 \
         						-vcodec libx264 \
@@ -110,7 +122,7 @@ class Captura:
         						-f segment \
         						-reset_timestamps 1 \
         						-segment_time {segmento_min} \
-        						'/media/video/Captura_{self.dia}/%04d_{self.nombre}-{self.dia}-{self.hora}_cap.mp4'")
+        						'/media/video/Captura_{self.dia}/%04d_{self.nombre}-{self.dia}-{hora}_cap.mp4'")
                     else:
                         return False
                 except AttributeError:
@@ -119,7 +131,9 @@ class Captura:
                 pass
 
     def stop(self):  # Finaliza la captura matando el proceso identificado en pid_proceso
-        capturando = self.en_proceso()
-        PID = self.pid_proceso()
-        if capturando:
-            os.system(f"kill {PID}")
+        # print('stop')
+        # capturando = self.en_proceso()
+        pid = self.pid_proceso()
+        # if capturando:
+        os.system(f"kill {pid}")
+        os.system(f" rm /home/augusto/Documentos/CODIGOS/CAPTURADORA/capturadora/cuenta.txt")
