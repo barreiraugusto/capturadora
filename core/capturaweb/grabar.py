@@ -42,6 +42,7 @@ class Captura:
         script = "gen_tiempo.sh"
         try:
             self.pid = int(subprocess.check_output(["pgrep", "-f", script]))
+            print(self.pid)
             return self.pid
         except subprocess.CalledProcessError:
         # resultado = os.popen("ps aux | grep get_tiempo | grep /bin/bash").read()
@@ -52,7 +53,7 @@ class Captura:
         # if "gen_tiempo" in lista_comando:
         #     return self.pid
         # else:
-        #     return False
+            return False
 
     def en_proceso(self):  # devuelve True o False dependiendo de si el proceso esta en ejecucion o no
         proceso = self.pid_proceso()
