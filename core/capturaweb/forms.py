@@ -13,7 +13,8 @@ class DatosGrabacionForm(forms.ModelForm):
                                        widget=forms.RadioSelect(attrs={'class': 'form-check'}))
     convertida = forms.ChoiceField(choices=CONVERTIR, initial=False,
                                    widget=forms.RadioSelect(attrs={'class': 'form-check'}))
-    segmento = forms.CharField(max_length=4, initial=10, required=False)
+    segmento = forms.CharField(max_length=4, initial=10, required=False,
+                               widget=forms.TextInput(attrs={'style': 'visibility: hidden;'}))
 
     class Meta:
         model = Grabacion

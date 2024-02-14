@@ -18,7 +18,8 @@
                 <div class="modal-title col-lg-8 col-sm-12">
                     <h3>
                         {% if ocupada %}
-                        <label class="text-danger">GRABANDO: {{ titulo }}</label>
+                        <label class="text-danger">GRABANDO</label>
+                        <p>{{ titulo.0 }}</p>
                         {% else %}
                         <label class="text-success" style="display: inline;">ESPERANDO</label>
                         {% endif %}
@@ -57,6 +58,7 @@
                                 {{ form.tipo_grabacion.errors }}
                                 {{ form.tipo_grabacion.label_tag }}
                                 {{ form.tipo_grabacion }}
+                                {{ form.segmento }}
                             </div>
                         </div>
                     </div>
