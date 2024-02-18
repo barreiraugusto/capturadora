@@ -1,5 +1,4 @@
 import os
-import subprocess
 import threading
 import time
 from datetime import date
@@ -38,21 +37,12 @@ class Captura:
             os.chmod(f"{ruta_directorio}/OV", 0o777)
 
     def pid_proceso(self):  # saco el ID del proceso de ffmpeg que esta ocupando la placa DeckLink
-        # comando = os.popen("ps aux | grep ffmpeg | grep DeckLink").read()
-        script = "gen_tiempo.sh"
-        try:
-            self.pid = int(subprocess.check_output(["pgrep", "-f", script]))
-            print(self.pid)
+        comando = os.popen("ps aux | grep ffmpeg | grep DeckLink").read()
+        lista_comando = comando.split()
+        self.pid = lista_comando[1]
+        if "decklink" in lista_comando:
             return self.pid
-        except subprocess.CalledProcessError:
-        # resultado = os.popen("ps aux | grep get_tiempo | grep /bin/bash").read()
-        # lista_comando = resultado.split()
-        # print(f'Lista ==== {lista_comando}')
-        # self.pid = lista_comando[1]
-        # if "decklink" in lista_comando:
-        # if "gen_tiempo" in lista_comando:
-        #     return self.pid
-        # else:
+        else:
             return False
 
     def en_proceso(self):  # devuelve True o False dependiendo de si el proceso esta en ejecucion o no
@@ -65,10 +55,9 @@ class Captura:
 
     def para_capturar(self, nombre):
         self.nombre = nombre
-        self.proceso = subprocess.Popen(['/home/augusto/Documentos/CODIGOS/gen_tiempo.sh'])
-        # self.capturarlo = True
+        self.capturarlo = True
 
-    def para_captura_segmentada(self, nombre, segmento=10):
+    def para_captura_segmentada(self, nombre, segmento=60):
         self.segmento = segmento
         self.nombre = nombre
         self.capturarlo_seg = True
@@ -81,17 +70,7 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        os.system(f"/opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i 'DeckLink SDI 4K@8'\
-                                 -pix_fmt yuv420p\
-                                 -crf 20\
-                                 -b:a 256k\
-                                 -g 25\
-                                 -flags +ildct+ilme -top 1\
-                                 -x264opts tff\
-                                 -profile:v main -level 4.0\
-                                 -preset ultrafast\
-                                 -y\
-                                 '/media/video/Captura_{self.dia}/{self.nombre}_cap.mp4'")
+                        os.system(f"utils/rec.sh {self.nombre}")
                     else:
                         return False
                 except AttributeError:
@@ -104,26 +83,10 @@ class Captura:
             time.sleep(.5)
             if self.capturarlo_seg:
                 self.capturarlo_seg = False
-                segmento_min = round(int(self.segmento) / 0.016666667)
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        hora = get_hora()
-                        os.system(f"/opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i 'DeckLink SDI 4K@8'\
-        						-strict -2 \
-        						-vcodec libx264 \
-        						-crf 20 \
-        						-pix_fmt yuv420p \
-        						-tune fastdecode \
-        						-preset ultrafast \
-        						-g 25 \
-        						-flags +ildct+ilme -top 1 \
-        						-x264opts tff \
-        						-b:a 256k \
-        						-f segment \
-        						-reset_timestamps 1 \
-        						-segment_time {segmento_min} \
-        						'/media/video/Captura_{self.dia}/%04d_{self.nombre}-{self.dia}-{hora}_cap.mp4'")
+                        os.system(f"utils/rec_secuencial.sh {self.nombre} {self.segmento}")
                     else:
                         return False
                 except AttributeError:
@@ -132,9 +95,8 @@ class Captura:
                 pass
 
     def stop(self):  # Finaliza la captura matando el proceso identificado en pid_proceso
-        # print('stop')
-        # capturando = self.en_proceso()
+        capturando = self.en_proceso()
         pid = self.pid_proceso()
-        # if capturando:
-        os.system(f"kill {pid}")
-        os.system(f" rm /home/augusto/Documentos/CODIGOS/CAPTURADORA/capturadora/cuenta.txt")
+        if capturando:
+            os.system(f"kill {pid}")
+            os.system(f"rm /tmp/datos")

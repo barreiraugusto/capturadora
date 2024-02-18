@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -24,7 +25,8 @@ class CapturaView(FormView):
         hora_arg = datetime.datetime.now(zona_hora)
         ocupada = self.grabacion.en_proceso()
         hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
-        titulo = f'{data.get("titulo").upper()}_{hora}'
+        titulo_pos = f'{data.get("titulo").upper()}_{hora}'
+        titulo = re.sub(r'[/. ,]', '_', titulo_pos)
         if 'rec' in self.request.POST:
             tipo_grabacion = data.get("tipo_grabacion")
             if ocupada:
@@ -33,10 +35,10 @@ class CapturaView(FormView):
                                f'La grabacion {titulo} esta en curso.\n Detengala antes de comenzar una nueva grabacion')
             else:
                 if tipo_grabacion == "2":
-                    segmento = data.get("segmento_de")
-                    self.grabacion.para_captura_segmentada(titulo, segmento)
+                    segmento = data.get("segmento")
                     guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
                                   data.get("convertida"))
+                    self.grabacion.para_captura_segmentada(titulo, segmento)
                 elif tipo_grabacion == "1":
                     guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
                                   data.get("convertida"))

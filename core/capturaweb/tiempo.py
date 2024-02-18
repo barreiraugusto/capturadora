@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 def get_tiempo(archivo):
     try:
-        with open('/home/augusto/Documentos/CODIGOS/CAPTURADORA/capturadora/cuenta.txt', 'r') as file:
+        with open('/tmp/datos', 'r') as file:
             lineas = file.readlines()
             ultima_linea = lineas[-1]
             patron = r'time= (\d+\.\d+)'
@@ -18,7 +18,7 @@ def get_tiempo(archivo):
                 tiempo = f"{int(horas):02}:{int(minutos):02}:{int(segundos):02}"
             else:
                 tiempo = "00:00:00"
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         tiempo = "00:00:00"
     return JsonResponse({'tiempos': tiempo})
 
