@@ -84,5 +84,5 @@ class CapturaView(FormView):
             form = DatosGrabacionForm(initial=initial_data)
             context['titulo'] = obtener_dato(self.path_temp, 'titulo'),
             context['form'] = form
-            context['grabadora'] = self.get_datos_capturadora().nombre
+        context['grabadora'] = self.get_datos_capturadora().nombre
         return context
