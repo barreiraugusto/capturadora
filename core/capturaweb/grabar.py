@@ -29,7 +29,12 @@ class Captura:
 
         self.th_capturar_segmentada = threading.Thread(target=self.captura_segmentada)
         self.th_capturar_segmentada.start()
-        self.capturadora = DatosGrabadora.objects.all()[0]
+
+    def get_datos_capturadora(self):
+        try:
+            return DatosGrabadora.objects.all()[0]
+        except IndexError:
+            return False
 
     def crear_directorio_captura(self):
         ruta_directorio = f"/media/video/Captura_{self.dia}"
@@ -69,12 +74,12 @@ class Captura:
         while True:
             time.sleep(.5)
             if self.capturarlo:
-
+                capturadora = self.get_datos_capturadora()
                 self.capturarlo = False
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        os.system(f"utils/rec.sh {self.nombre} {self.capturadora.placa} {self.capturadora.formato}")
+                        os.system(f"utils/rec.sh {self.nombre} {capturadora.placa} {capturadora.formato}")
                     else:
                         return False
                 except AttributeError:
@@ -86,11 +91,13 @@ class Captura:
         while True:
             time.sleep(.5)
             if self.capturarlo_seg:
+                capturadora = self.get_datos_capturadora()
                 self.capturarlo_seg = False
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        os.system(f"utils/rec_secuencial.sh {self.nombre} {self.segmento} {self.capturadora.placa} {self.capturadora.formato}")
+                        os.system(
+                            f"utils/rec_secuencial.sh {self.nombre} {self.segmento} {capturadora.placa} {capturadora.formato}")
                     else:
                         return False
                 except AttributeError:
