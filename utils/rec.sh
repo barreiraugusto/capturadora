@@ -11,9 +11,9 @@ else
 fi
 
 if [ ! "$s" ]; then
-    n="/media/video/Captura_"$d"/"$dh"_cap.mp4"
+    n="$4/Captura_"$d"/"$dh"_cap.mp4"
 else
-    n="/media/video/Captura_"$d"/"$s"_cap.mp4"
+    n="$4/Captura_"$d"/"$s"_cap.mp4"
 fi
 
 /opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i "$2"@"$3" \
