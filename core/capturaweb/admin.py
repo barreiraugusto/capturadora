@@ -1,10 +1,15 @@
 from django.contrib import admin
 
-from core.capturaweb.models import Grabacion
+from core.capturaweb.models import Grabacion, DatosGrabadora
 
 
 class GrabacionAdmin(admin.ModelAdmin):
     list_display = ['titulo', 'duracion', 'convertida', 'tipo_grabacion']
 
 
+class DatosGrabadoraAdmin(admin.ModelAdmin):
+    list_display = ['nombre', 'placa', 'formato', 'directorio_de_grabacion']
+
+
 admin.site.register(Grabacion, GrabacionAdmin)
+admin.site.register(DatosGrabadora, DatosGrabadoraAdmin)

@@ -1,7 +1,9 @@
 import datetime
 import re
+import time
 
 from django.contrib import messages
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
@@ -20,6 +22,7 @@ class CapturaView(FormView):
     path_temp = '/tmp/grabacion_actual'
 
     def form_valid(self, form):
+        global context
         data = form.cleaned_data
         zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
         hora_arg = datetime.datetime.now(zona_hora)
@@ -27,12 +30,13 @@ class CapturaView(FormView):
         hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
         titulo_pos = f'{data.get("titulo").upper()}_{hora}'
         titulo = re.sub(r'[/. ,]', '_', titulo_pos)
+
         if 'rec' in self.request.POST:
             tipo_grabacion = data.get("tipo_grabacion")
             if ocupada:
                 titulo = obtener_dato(self.path_temp, "titulo")
                 messages.error(self.request,
-                               f'La grabacion {titulo} esta en curso.\n Detengala antes de comenzar una nueva grabacion')
+                               f'La grabacion {titulo} está en curso.\n Deténgala antes de comenzar una nueva grabación')
             else:
                 if tipo_grabacion == "2":
                     segmento = data.get("segmento")
@@ -43,7 +47,9 @@ class CapturaView(FormView):
                     guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
                                   data.get("convertida"))
                     self.grabacion.para_capturar(titulo)
-            return self.render_to_response(self.get_context_data(form=form, ocupada=ocupada, titulo=titulo))
+            time.sleep(2)
+            ocupada = self.grabacion.en_proceso()
+            context = self.get_context_data(form=form, ocupada=ocupada, titulo=titulo)
         elif 'stop' in self.request.POST:
             convertir = data.get("convertir")
             if ocupada:
@@ -51,7 +57,10 @@ class CapturaView(FormView):
                 if convertir:
                     self.convertir.para_convertir(titulo)
                 eliminar_datos(self.path_temp)
-            return self.render_to_response(self.get_context_data(form=form))
+            time.sleep(2)
+            context = self.get_context_data(form=form)
+
+        return render(self.request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

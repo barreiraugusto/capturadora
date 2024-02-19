@@ -15,7 +15,6 @@ if [ ! "$s" ]; then
 else
     n="/media/video/Captura_"$d"/"$s"_cap.mp4"
 fi
-echo "Capturando: "$n
 
 /opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i 'DeckLink SDI 4K@11' \
  -pix_fmt yuv420p \
