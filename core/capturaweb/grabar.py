@@ -4,6 +4,8 @@ import time
 from datetime import date
 from datetime import datetime
 
+from core.capturaweb.models import DatosGrabadora
+
 
 def get_hora():
     ahora = datetime.now()
@@ -27,6 +29,7 @@ class Captura:
 
         self.th_capturar_segmentada = threading.Thread(target=self.captura_segmentada)
         self.th_capturar_segmentada.start()
+        self.capturadora = DatosGrabadora.objects.all()[0]
 
     def crear_directorio_captura(self):
         ruta_directorio = f"/media/video/Captura_{self.dia}"
@@ -66,11 +69,12 @@ class Captura:
         while True:
             time.sleep(.5)
             if self.capturarlo:
+
                 self.capturarlo = False
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        os.system(f"utils/rec.sh {self.nombre}")
+                        os.system(f"utils/rec.sh {self.nombre} {self.capturadora.placa} {self.capturadora.formato}")
                     else:
                         return False
                 except AttributeError:
@@ -86,7 +90,7 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        os.system(f"utils/rec_secuencial.sh {self.nombre} {self.segmento}")
+                        os.system(f"utils/rec_secuencial.sh {self.nombre} {self.segmento} {self.capturadora.placa} {self.capturadora.formato}")
                     else:
                         return False
                 except AttributeError:
