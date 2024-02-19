@@ -16,7 +16,7 @@ else
     n="/media/video/Captura_"$d"/"$s"_cap.mp4"
 fi
 
-/opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i 'DeckLink SDI 4K@11' \
+/opt/ffmpeg/bin/ffmpeg -vsync passthrough -r 25 -f decklink -i "$2"@"$3" \
  -pix_fmt yuv420p \
  -crf 20 \
  -b:a 256k \
