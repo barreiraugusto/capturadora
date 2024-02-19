@@ -79,7 +79,7 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
-                        os.system(f"utils/rec.sh {self.nombre} {capturadora.placa.replace('_', ' ')} {capturadora.formato}")
+                        os.system(f"utils/rec.sh {self.nombre} {capturadora.placa} {capturadora.formato}")
                     else:
                         return False
                 except AttributeError:
