@@ -11,6 +11,7 @@ from .conversor import Convertir
 from .datos_temp import guardar_datos, obtener_dato, eliminar_datos
 from .forms import DatosGrabacionForm
 from .grabar import Captura
+from .models import DatosGrabadora
 
 
 class CapturaView(FormView):
@@ -20,6 +21,12 @@ class CapturaView(FormView):
     grabacion = Captura()
     convertir = Convertir()
     path_temp = '/tmp/grabacion_actual'
+
+    def get_datos_capturadora(self):
+        try:
+            return DatosGrabadora.objects.all()[0]
+        except IndexError:
+            return False
 
     def form_valid(self, form):
         global context
@@ -77,4 +84,5 @@ class CapturaView(FormView):
             form = DatosGrabacionForm(initial=initial_data)
             context['titulo'] = obtener_dato(self.path_temp, 'titulo'),
             context['form'] = form
+            context['grabadora'] = self.get_datos_capturadora().nombre
         return context
