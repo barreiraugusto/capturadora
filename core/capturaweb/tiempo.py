@@ -5,6 +5,7 @@ from django.http import JsonResponse
 
 from .datos_temp import modificar_dato, obtener_dato
 
+
 def get_tiempo(archivo):
     try:
         with open('/tmp/datos', 'r') as file:
