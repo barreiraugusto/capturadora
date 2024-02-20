@@ -5,7 +5,7 @@ import os
 def guardar_datos(titulo, duracion, tipo, segmento, finalizada, convertir):
     video_data = {
         'titulo': titulo,
-        'duracion': duracion,
+        'duracion': str(duracion),
         'tipo': tipo,
         'segmento': str(segmento),
         'finalizada': finalizada,
