@@ -47,8 +47,8 @@ class CapturaView(FormView):
             else:
                 if tipo_grabacion == "2":
                     segmento = data.get("segmento")
-                    guardar_datos(titulo, "None", data.get("tipo_grabacion"), data.get("segmento"), False,
-                                  data.get("convertida"))
+                    guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
+                                  data.get("convertida"), "00:00:00")
                     self.grabacion.para_captura_segmentada(titulo, segmento)
                 elif tipo_grabacion == "1":
                     guardar_datos(titulo, "None", data.get("tipo_grabacion"), data.get("segmento"), False,

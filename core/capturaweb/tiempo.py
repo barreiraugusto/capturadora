@@ -21,7 +21,6 @@ def get_tiempo(archivo):
                 tiempo = f"{int(horas):02}:{int(minutos):02}:{int(segundos):02}"
                 modificar_dato("/tmp/grabacion_actual", "duracion", tiempo)
             else:
-                guardar_datos("None", "00:00:00", "continua", 10, False, False)
                 tiempo_guardado = obtener_dato("/tmp/grabacion_actual", "duracion")
                 tiempo_dt = datetime.strptime(tiempo_guardado, "%H:%M:%S")
                 tiempo_dt += timedelta(seconds=1)
