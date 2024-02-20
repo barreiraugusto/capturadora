@@ -18,8 +18,6 @@ def guardar_datos(titulo, tipo, segmento, finalizada, convertir, duracion):
     return video_file_path
 
 
-
-
 def obtener_dato(video_file_path, parametro):
     try:
         with open(video_file_path, 'r') as temp_file:
@@ -46,3 +44,10 @@ def eliminar_datos(video_file_path):
         os.remove(video_file_path)
     except FileNotFoundError as error:
         print(error)
+
+
+if __name__ == "__main__":
+    guardar_datos("titulo", "continua", 10, False, False, "00:00:00")
+    modificar_dato("/tmp/grabacion_actual", "duracion", "00:10:00")
+    duracion = obtener_dato("/tmp/grabacion_actual", "duracion")
+    print(type(duracion))
