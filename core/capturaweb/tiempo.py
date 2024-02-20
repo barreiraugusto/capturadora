@@ -1,7 +1,9 @@
 import re
+from datetime import datetime, timedelta
 
 from django.http import JsonResponse
 
+from .datos_temp import modificar_dato, obtener_dato
 
 def get_tiempo(archivo):
     try:
@@ -16,8 +18,13 @@ def get_tiempo(archivo):
                 minutos = (float(segundos) % 3600) // 60
                 segundos = float(segundos) % 60
                 tiempo = f"{int(horas):02}:{int(minutos):02}:{int(segundos):02}"
+                modificar_dato("/tmp/grabacion_actual", "duracion", tiempo)
             else:
-                tiempo = "00:00:00"
+                tiempo_guardado = obtener_dato("/tmp/grabacion_actual", "duracion")
+                tiempo_dt = datetime.strptime(tiempo_guardado, "%H:%M:%S")
+                tiempo_dt += timedelta(seconds=1)
+                modificar_dato("/tmp/grabacion_actual", "duracion", tiempo_dt)
+                tiempo = tiempo_dt.strftime("%H:%M:%S")
     except FileNotFoundError as e:
         tiempo = "00:00:00"
     return JsonResponse({'tiempos': tiempo})

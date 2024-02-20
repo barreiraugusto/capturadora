@@ -2,9 +2,10 @@ import json
 import os
 
 
-def guardar_datos(titulo, tipo, segmento, finalizada, convertir):
+def guardar_datos(titulo, duracion, tipo, segmento, finalizada, convertir):
     video_data = {
         'titulo': titulo,
+        'duracion': duracion,
         'tipo': tipo,
         'segmento': str(segmento),
         'finalizada': finalizada,
