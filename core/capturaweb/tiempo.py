@@ -24,7 +24,8 @@ def get_tiempo(archivo):
                 tiempo_guardado = obtener_dato("/tmp/grabacion_actual", "duracion")
                 tiempo_dt = datetime.strptime(tiempo_guardado, "%H:%M:%S")
                 tiempo_dt += timedelta(seconds=1)
-                modificar_dato("/tmp/grabacion_actual", "duracion", tiempo_dt)
+                print(tiempo_dt)
+                modificar_dato("/tmp/grabacion_actual", "duracion", str(tiempo_dt))
                 tiempo = tiempo_dt.strftime("%H:%M:%S")
     except FileNotFoundError as e:
         tiempo = "00:00:00"
