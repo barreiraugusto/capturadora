@@ -9,13 +9,14 @@ def guardar_datos(titulo, tipo, segmento, finalizada, convertir, duracion):
         'segmento': str(segmento),
         'finalizada': finalizada,
         'convertir': convertir,
-        'duracion': duracion.strftime('%H:%M:%S')
+        'duracion': duracion
     }
 
     with open('/tmp/grabacion_actual', '+w') as temp_file:
         json.dump(video_data, temp_file, indent=2)
     video_file_path = temp_file.name
     return video_file_path
+
 
 
 
