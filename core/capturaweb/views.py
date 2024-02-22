@@ -62,8 +62,8 @@ class CapturaView(FormView):
             if ocupada:
                 self.grabacion.stop()
                 if convertir:
+                    titulo = obtener_dato(self.path_temp, "titulo")
                     self.convertir.para_convertir(titulo)
-                    print(titulo)
                 eliminar_datos(self.path_temp)
             time.sleep(2)
             context = self.get_context_data(form=form)
