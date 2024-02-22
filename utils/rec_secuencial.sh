@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 5 ]; then
     echo "Error: Debe proporcionar el nombre del archivo de video como primer argumento y el tiempo de segmentación en milisegundos como segundo argumento."
     exit 1
 fi
