@@ -79,8 +79,12 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
+                        nombre = self.nombre
+                        placa = capturadora.placa
+                        formato = capturadora.formato
+                        direccion = capturadora.direccion_de_grabacion
                         os.system(
-                            f"utils/rec.sh {self.nombre} {capturadora.placa} {capturadora.formato} {capturadora.directorio_de_grabacion}")
+                            f"utils/rec.sh {nombre} {placa} {formato} {direccion}")
                     else:
                         return False
                 except AttributeError:
@@ -97,8 +101,13 @@ class Captura:
                 capturando = self.en_proceso()
                 try:
                     if not capturando:
+                        nombre = self.nombre
+                        segmento = self.segmento
+                        placa = capturadora.placa
+                        formato = capturadora.formato
+                        direccion = capturadora.direccion_de_grabacion
                         os.system(
-                            f"utils/rec_secuencial.sh {self.nombre} {self.segmento} {capturadora.placa} {capturadora.formato} {capturadora.directorio_de_grabacion}")
+                            f"utils/rec_secuencial.sh {nombre} {segmento} {placa} {formato} {direccion}")
                     else:
                         return False
                 except AttributeError:
