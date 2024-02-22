@@ -3,6 +3,8 @@ import threading
 import time
 from datetime import date, datetime
 
+from core.capturaweb.models import DatosGrabadora
+
 
 class Convertir:
     def __init__(self):
@@ -14,6 +16,12 @@ class Convertir:
         self.archivo = "Nada"
         self.th_convertir = threading.Thread(target=self.convertir)
         self.th_convertir.start()
+
+    def get_datos_capturadora(self):
+        try:
+            return DatosGrabadora.objects.all()[0]
+        except IndexError:
+            return False
 
     def para_convertir(self, archivo):
         self.archivo = archivo
@@ -30,8 +38,9 @@ class Convertir:
                     print(f"Error al convertir: {str(e)}")
 
     def ejecutar_ffmpeg(self):
-        input_file = f"/media/video/Captura_{self.dia}/{self.archivo}_cap.mp4"
-        output_file = f"/media/video/Captura_{self.dia}/{self.archivo}-{self.hora}_720_cap.mp4"
+        capturadora = self.get_datos_capturadora()
+        input_file = f"{capturadora.directorio_de_grabacion}/Captura_{self.dia}/{self.archivo}_cap.mp4"
+        output_file = f"{capturadora.directorio_de_grabacion}/Captura_{self.dia}/{self.archivo}_720_cap.mp4"
 
         ffmpeg_command = [
             "/opt/ffmpeg/bin/ffmpeg",

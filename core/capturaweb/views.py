@@ -58,7 +58,7 @@ class CapturaView(FormView):
             ocupada = self.grabacion.en_proceso()
             context = self.get_context_data(form=form, ocupada=ocupada, titulo=titulo)
         elif 'stop' in self.request.POST:
-            convertir = data.get("convertir")
+            convertir = data.get("convertida")
             if ocupada:
                 self.grabacion.stop()
                 if convertir:
