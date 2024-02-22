@@ -37,12 +37,12 @@ class Captura:
             return False
 
     def crear_directorio_captura(self):
-        ruta_directorio = f"/media/video/Captura_{self.dia}"
+        capturadora = self.get_datos_capturadora()
+        directorio = capturadora.directorio_de_grabacion
+        ruta_directorio = f"{directorio}/Capturas_del_{self.dia}"
         if not os.path.exists(ruta_directorio):
             os.makedirs(ruta_directorio)
             os.chmod(ruta_directorio, 0o777)
-            os.makedirs(f"{ruta_directorio}/OV")
-            os.chmod(f"{ruta_directorio}/OV", 0o777)
 
     def pid_proceso(self):  # saco el ID del proceso de ffmpeg que esta ocupando la placa DeckLink
         comando = os.popen("ps aux | grep ffmpeg | grep DeckLink").read()

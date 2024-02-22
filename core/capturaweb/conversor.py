@@ -39,8 +39,8 @@ class Convertir:
 
     def ejecutar_ffmpeg(self):
         capturadora = self.get_datos_capturadora()
-        input_file = f"{capturadora.directorio_de_grabacion}/Captura_{self.dia}/{self.archivo}_cap.mp4"
-        output_file = f"{capturadora.directorio_de_grabacion}/Captura_{self.dia}/{self.archivo}_720_cap.mp4"
+        input_file = f"{capturadora.directorio_de_grabacion}/Capturas_del_{self.dia}/{self.archivo}_cap.mp4"
+        output_file = f"{capturadora.directorio_de_grabacion}/Capturas_del_{self.dia}/{self.archivo}_720_cap.mp4"
 
         ffmpeg_command = [
             "/opt/ffmpeg/bin/ffmpeg",

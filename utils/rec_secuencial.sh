@@ -8,7 +8,7 @@ fi
 s="${1// /_}"
 tiempo="$2"
 
-directorio="$5/Captura_$(date +"%d-%m-%Y")"
+directorio="$5/Capturas_del_$(date +"%d-%m-%Y")"
 
 mkdir -p "$directorio"
 
