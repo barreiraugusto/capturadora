@@ -82,7 +82,7 @@ class Captura:
                         nombre = self.nombre
                         placa = capturadora.placa
                         formato = capturadora.formato
-                        direccion = capturadora.direccion_de_grabacion
+                        direccion = capturadora.directorio_de_grabacion
                         os.system(
                             f"utils/rec.sh {nombre} {placa} {formato} {direccion}")
                     else:
@@ -105,7 +105,7 @@ class Captura:
                         segmento = self.segmento
                         placa = capturadora.placa
                         formato = capturadora.formato
-                        direccion = capturadora.direccion_de_grabacion
+                        direccion = capturadora.directorio_de_grabacion
                         os.system(
                             f"utils/rec_secuencial.sh {nombre} {segmento} {placa} {formato} {direccion}")
                     else:
