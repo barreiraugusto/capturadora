@@ -45,12 +45,12 @@ p {
     margin-bottom: 1rem;
 }
 
-@media (min-width: 992px) {
-        #tiempos-container {
-            font-size: 6rem;
+@media (min0-width: 991.98px) and (max-width: 1199.98px)and (orientation:landscape) {
+    #tiempos-container {
+            font-size: 4rem;
             font-weight: 300;
         }
-    }
+}
 /*Escritorio*/
 @media (min-width: 1199.98px)  {
     #tiempos-container {
@@ -64,18 +64,13 @@ p {
 /*Portrait*/
 @media (min-width: 576px) and (max-width: 991.98px) and (orientation:portrait) {
     #tiempos-container {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: 300;
         }
 }
 
 /*landscape*/
-@media (min0-width: 991.98px) and (max-width: 1199.98px)and (orientation:landscape) {
-    #tiempos-container {
-            font-size: 3rem;
-            font-weight: 300;
-        }
-}
+
 /*fin tablet*/
 
 /*movil*/
@@ -83,14 +78,14 @@ p {
 /*Default*/
 @media (max-width: 575.98px)and (orientation:portrait) {
     #tiempos-container {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: 300;
         }
  }
 /*landscape*/
 @media (min-width: 576px) and (max-width: 991.98px) and (orientation:landscape) {
     #tiempos-container {
-            font-size: 3rem;
+            font-size: 5rem;
             font-weight: 300;
         }
 }
