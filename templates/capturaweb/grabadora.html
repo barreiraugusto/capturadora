@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="modal-title text-center col-lg-1 col-sm-12">
-                    <p>{{ grabadora.split.0 }}</p>
+                    <p class="text-truncate">{{ grabadora.split.0 }}</p>
                     <h1 class="display-2">{{ grabadora.split.1 }}</h1>
                 </div>
 
@@ -40,7 +40,7 @@
             <form method="post" action="/">
                 {% csrf_token %}
                 <div class="row modal-title">
-                    <div class="col-6">
+                    <div class="col-lg-6 col-sm-12 p-b-5">
                         <div class=" mt-2">
                             <div class="fieldWrapper">
                                 {{ form.titulo.errors }}
