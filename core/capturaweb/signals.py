@@ -3,6 +3,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 import logging
+
+from .datos_temp import guardar_datos
+
 logger = logging.getLogger('capturadora')
 
 
@@ -20,7 +23,8 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
         convertidor = Convertir()
 
         def inicar_grabacion():
-            logger.debug(f'TIPO DE GRABACION - {instance.tipo_grabacion}')
+            guardar_datos(instance.titulo, instance.tipo_grabacion, instance.segmento, False,
+                          instance.convertida, "00:00:00")
             if instance.tipo_grabacion == 2:
                 segmento = instance.segmanto
                 nueva_grabacion.para_captura_segmentada(instance.titulo, segmento)
