@@ -146,7 +146,7 @@ LOGGING = {
         'file': {
             'level': LOGGING_LEVEL,
             'class': 'logging.FileHandler',
-            'filename': '/home/augusto/Documentos/CODIGOS/CAPTURADORA/deploy/app/logs/django.log',
+            'filename': '/home/tecnica/CAPTURADORA/deploy/app/logs/django.log',
         },
     },
     'loggers': {
