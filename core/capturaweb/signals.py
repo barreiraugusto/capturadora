@@ -2,6 +2,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+import logging
+logger = logging.getLogger('capturadora')
+
+
 from .conversor import Convertir
 from .grabar import Captura
 from .models import GrabacionProgramada
@@ -16,15 +20,18 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
         convertidor = Convertir()
 
         def inicar_grabacion():
-            if instance.tipo_grabacion == "2":
+            logger.debug(f'TIPO DE GRABACION - {instance.tipo_grabacion}')
+            if instance.tipo_grabacion == 2:
                 segmento = instance.segmanto
                 nueva_grabacion.para_captura_segmentada(instance.titulo, segmento)
-            elif instance.tipo_grabacion == "1":
+            elif instance.tipo_grabacion == 1:
+                logger.debug(f'GRABAR - {instance.titulo}')
                 nueva_grabacion.para_capturar(instance.titulo)
 
         def parar_grabacion():
             convertir = instance.convertida
             nueva_grabacion.stop()
+            logger.debug(f'STOP - {instance.titulo}')
             if convertir == "True":
                 titulo = instance.titulo
                 convertidor.para_convertir(titulo)

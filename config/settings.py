@@ -132,5 +132,33 @@ MESSAGE_TAGS = {
     mensajes.ERROR: 'danger',
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
+LOGGING_LEVEL = 'DEBUG'  # (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.FileHandler',
+            'filename': '/home/augusto/Documentos/CODIGOS/CAPTURADORA/deploy/app/logs/django.log',
+        },
+    },
+    'loggers': {
+        'capturadora': {
+            'handlers': ['console', 'file'],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+        'apscheduler': {
+            'handlers': ['console', 'file'],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+    },
+}
