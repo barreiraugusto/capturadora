@@ -1,3 +1,6 @@
+import re
+import datetime
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -21,23 +24,27 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
     if created:
         nueva_grabacion = Captura()
         convertidor = Convertir()
+        zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
+        hora_arg = datetime.datetime.now(zona_hora)
+        hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
+        titulo_pos = f'{instance.titulo.upper()}_{hora}'
+        titulo = re.sub(r'[/. ,]', '_', titulo_pos)
 
         def inicar_grabacion():
-            guardar_datos(instance.titulo, instance.tipo_grabacion, instance.segmento, False,
+            guardar_datos(titulo, instance.tipo_grabacion, instance.segmento, False,
                           instance.convertida, "00:00:00")
             if instance.tipo_grabacion == 2:
                 segmento = instance.segmanto
-                nueva_grabacion.para_captura_segmentada(instance.titulo, segmento)
+                nueva_grabacion.para_captura_segmentada(titulo, segmento)
             elif instance.tipo_grabacion == 1:
-                logger.debug(f'GRABAR - {instance.titulo}')
-                nueva_grabacion.para_capturar(instance.titulo)
+                logger.debug(f'GRABAR - {titulo}')
+                nueva_grabacion.para_capturar(titulo)
 
         def parar_grabacion():
             convertir = instance.convertida
             nueva_grabacion.stop()
-            logger.debug(f'STOP - {instance.titulo}')
+            logger.debug(f'STOP - {titulo}')
             if convertir == "True":
-                titulo = instance.titulo
                 convertidor.para_convertir(titulo)
 
         scheduler.add_job(inicar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
