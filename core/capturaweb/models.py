@@ -27,7 +27,7 @@ class GrabacionProgramada(models.Model):
     titulo = models.CharField(max_length=100)
     convertida = models.BooleanField(verbose_name="Convertir", default=False)
     tipo_grabacion = models.IntegerField(verbose_name="Tipo", default=1)
-    # fecha = models.DateField()
+    segmento = models.IntegerField(verbose_name="Segmento", max_length=3, default=60)
     lunes = models.BooleanField("Lunes", default=None)
     martes = models.BooleanField("Martes", default=None)
     miercoles = models.BooleanField("Miercoles", default=None)
@@ -60,25 +60,20 @@ class GrabacionProgramada(models.Model):
                 mensaje += f'- {grabacion.titulo} ({grabacion.hora_inicio}-{grabacion.hora_fin})\n'
             raise ValidationError(mensaje)
 
-    # def clean(self):
-    #     superposiciones = []
-    #     grabaciones = GrabacionProgramada.objects.filter(fecha=self.fecha)
-    #     hora_actual_utc = timezone.now()
-    #     hora_actual_argentina = hora_actual_utc.astimezone(timezone.get_current_timezone())
-    #
-    #     for grabacion in grabaciones:
-    #         if not (self.hora_inicio >= grabacion.hora_fin or self.hora_fin <= grabacion.hora_inicio):
-    #             superposiciones.append(grabacion)
-    #
-    #     if superposiciones:
-    #         superposiciones_str = "\n, ".join(str(grabacion) for grabacion in superposiciones)
-    #         raise ValidationError(
-    #             f"La grabación se superpone con la(s) siguiente(s) grabación(es):{superposiciones_str}.")
-    #
-    #     if self.hora_inicio >= self.hora_fin:
-    #         raise ValidationError("La hora de inicio debe ser anterior a la hora de finalización.")
-    #
-    #     if self.hora_inicio <= hora_actual_argentina.time():
-    #         print(timezone.now().time())
-    #         raise ValidationError(
-    #             "La hora de inicio no puede ser anterior a la hora actual.")
+    def get_dias_semana(self):
+        dias = []
+        if self.lunes:
+            dias.append('mon')
+        if self.martes:
+            dias.append('tue')
+        if self.miercoles:
+            dias.append('wed')
+        if self.jueves:
+            dias.append('thu')
+        if self.viernes:
+            dias.append('fri')
+        if self.sabado:
+            dias.append('sat')
+        if self.domingo:
+            dias.append('sun')
+        return ",".join(dias)

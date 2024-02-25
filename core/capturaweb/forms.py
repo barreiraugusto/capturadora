@@ -41,11 +41,6 @@ class ProgramarGrabacionForm(forms.ModelForm):
                   'sabado', 'domingo', 'convertida', 'tipo_grabacion']
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control'}),
-            # 'fecha': forms.DateInput(
-            #     format='%Y-%m-%d',
-            #     attrs={'class': 'form-control',
-            #            'type': 'date'
-            #            }),
             'hora_inicio': forms.TimeInput(
                 attrs={'class': 'form-control',
                        'placeholder': 'Select a date',
