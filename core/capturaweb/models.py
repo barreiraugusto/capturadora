@@ -27,7 +27,7 @@ class GrabacionProgramada(models.Model):
     titulo = models.CharField(max_length=100)
     convertida = models.BooleanField(verbose_name="Convertir", default=False)
     tipo_grabacion = models.IntegerField(verbose_name="Tipo", default=1)
-    segmento = models.IntegerField(verbose_name="Segmento", max_length=3, default=60)
+    segmento = models.IntegerField(verbose_name="Segmento", default=60)
     lunes = models.BooleanField("Lunes", default=None)
     martes = models.BooleanField("Martes", default=None)
     miercoles = models.BooleanField("Miercoles", default=None)
