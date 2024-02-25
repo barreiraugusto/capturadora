@@ -5,13 +5,13 @@ import time
 from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 
 from .conversor import Convertir
 from .datos_temp import guardar_datos, obtener_dato, eliminar_datos
-from .forms import DatosGrabacionForm
+from .forms import DatosGrabacionForm, ProgramarGrabacionForm
 from .grabar import Captura
-from .models import DatosGrabadora
+from .models import DatosGrabadora, GrabacionProgramada
 
 
 class CapturaView(FormView):
@@ -86,4 +86,69 @@ class CapturaView(FormView):
             context['titulo'] = obtener_dato(self.path_temp, 'titulo'),
             context['form'] = form
         context['grabadora'] = self.get_datos_capturadora().nombre
+        context['grabaciones_programadas'] = GrabacionProgramada.objects.all()
         return context
+
+
+class ProgramarGrabacion(CreateView):
+    model = GrabacionProgramada
+    form_class = ProgramarGrabacionForm
+    template_name = 'capturaweb/agregar_grabacion.html'
+    success_url = reverse_lazy('capturaweb')
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        errors = form.errors['__all__'] if '__all__' in form.errors else None
+        return self.render_to_response(self.get_context_data(errors=errors))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['anterior'] = 'Inicio'
+        context['url_general'] = reverse_lazy('capturaweb')
+        context['comentario'] = 'Programe una grabacion automatica'
+        context['title_table'] = 'Programadas'
+        context['segment'] = 'alumnos'
+        context['btn_accion'] = 'Guardar'
+        context['title'] = 'Programar'
+        return context
+
+
+class UpdateGrabacionView(UpdateView):
+    model = GrabacionProgramada
+    form_class = ProgramarGrabacionForm
+    template_name = 'capturaweb/update_grabacion.html'
+    success_url = reverse_lazy('capturaweb')
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        errors = form.errors['__all__'] if '__all__' in form.errors else None
+        return self.render_to_response(self.get_context_data(errors=errors))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['anterior'] = 'Inicio'
+        context['url_general'] = reverse_lazy('capturaweb')
+        context['comentario'] = 'Programe una grabacion automatica'
+        context['title_table'] = 'Programadas'
+        context['segment'] = 'alumnos'
+        context['btn_accion'] = 'Guardar'
+        return context
+
+
+class BorrarGrabacionView(DeleteView):
+    model = GrabacionProgramada
+    template_name = 'capturaweb/borrar_grabacion.html'
+    success_url = reverse_lazy('capturaweb')
+
+    def get_grabacion(self):
+        return GrabacionProgramada.objects.get(id=self.object.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comentario'] = f'Se eliminara la grabacion!'
+        context['mensaje'] = f'Decea borrar la grabacion {self.get_grabacion()}'
+        context['anterior'] = 'Inicio'
+        context['url_general'] = reverse_lazy('capturaweb')
+        context['btn_accion'] = 'Guardar'
+        return context
+

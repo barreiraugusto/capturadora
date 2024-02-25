@@ -1,7 +1,8 @@
-{% extends "capturaweb/base.html" %} {% load static %}
+{% extends "capturaweb/layouts/base.html" %} {% load static %}
 {% block title %}{{ grabadora }}{% endblock %}
 {% block content %}
-<div class="jumbotron" xmlns="http://www.w3.org/1999/html">
+<div class="col-xl-12">
+    <div class="card border-light shadow-sm">
     <div class="modal-content">
         <div class="modal-body">
             <div class="row">
@@ -70,16 +71,17 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-default btn-custom" name="rec"></button>
-                    <button type="submit" class="btn btn-default btn-square" name="stop"></button>
+                    <input type="submit" class="btn btn-danger" value="REC " name="rec">
+                    <input type="submit" class="btn btn-secondary" value="STOP " name="stop">
                 </div>
             </form>
         </div>
+        {% include 'capturaweb/grabaciones_programadas.html' %}
+    </div>
     </div>
 </div>
 {% endblock %}
 {% block extrajs %}
-<!--<script src="{% static 'js/leer.js' %}"></script>-->
 {% endblock extrajs %}
 {% block scripts %}
 <script>

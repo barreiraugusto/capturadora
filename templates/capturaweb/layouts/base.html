@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {% load static %}
+     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Fonts -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <!-- Styles -->
+    <link href="{% static 'capturadora/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+
+    <link href="{% static 'capturadora/css/gestion.css' %}" rel="stylesheet">
+
+    <!-- Fontawesome -->
+    <link type="text/css" href="{% static 'capturadora/vendor/@fortawesome/fontawesome-free/css/all.min.css' %}"
+          rel="stylesheet">
+
+    <!-- Celular -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock %}"/>
+    {% block head %} {% endblock %}
+    <script>
+        $(document).ready(function() {
+            $("#id_tipo_grabacion_1").click(function() {
+                $("#id_segmento").css("visibility", "visible");
+            });
+            $("#id_tipo_grabacion_0").click(function() {
+                $("#id_segmento").css("visibility", "hidden");
+
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+{% block content %}
+
+{% endblock %}
+{% block scripts %}
+<!-- Bootstrap -->
+<!-- Bootstrap JS y dependencias -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+{% endblock %}
+{% block extrajs %}
+{% endblock extrajs %}
+
+</body>
+
+</html>

@@ -131,3 +131,6 @@ MESSAGE_TAGS = {
     mensajes.WARNING: 'warning',
     mensajes.ERROR: 'danger',
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+

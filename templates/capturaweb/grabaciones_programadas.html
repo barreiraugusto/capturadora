@@ -1,0 +1,108 @@
+{% extends "capturaweb/layouts/lista.html" %}
+{% block breadcrumb %}
+<!-- [ breadcrumb ] start -->
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">{{ title }}</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">Grabaciones Programadas</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ breadcrumb ] end -->
+{% endblock breadcrumb %}
+{% block tabla %}
+<!-- [ basic-table ] start -->
+<div class="col-xl-12">
+    <div class="card border-light shadow-sm">
+        <div class="card">
+            <div class="card-header">
+                <h5>{{ title }}</h5>
+                <span class="d-block m-t-5">{{ object }}</span>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="col-12 col-xl-8">
+                    <div class="card card-body shadow-sm mb-4 alert alert-{{ message.tags }} alert-dismissible fade show"
+                         role="alert">
+                        <h6>{{ message }}</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="card-block table-border-style">
+                <div class="table-responsive">
+                    <br>
+                    <table class="table table-hover" id="data">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 25%;">Titulo</th>
+<!--                            <th scope="col" style="width: 15%;">Fecha</th>-->
+                            <th scope="col" style="width: 10%;">Inicio</th>
+                            <th scope="col" style="width: 10%;">Fin</th>
+                            <th scope="col" style="width: 5%;">Lu</th>
+                            <th scope="col" style="width: 5%;">Ma</th>
+                            <th scope="col" style="width: 5%;">Mi</th>
+                            <th scope="col" style="width: 5%;">Ju</th>
+                            <th scope="col" style="width: 5%;">Vi</th>
+                            <th scope="col" style="width: 5%;">Sa</th>
+                            <th scope="col" style="width: 5%;">Do</th>
+                            <th class="text-center" scope="col" style="width: 25%;">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in grabaciones_programadas %}
+                        <tr>
+                            <th>{{ object.titulo }}</th>
+<!--                            <td>{{ object.fecha|date:"d/m/Y" }}</td>-->
+                            <td>{{ object.hora_inicio }}</td>
+                            <td>{{ object.hora_fin }}</td>
+                            <td><span
+                                    class="{% if object.lunes == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td><span
+                                    class="{% if object.martes == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td><span
+                                    class="{% if object.miercoles == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td><span
+                                    class="{% if object.jueves == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td><span
+                                    class="{% if object.viernes == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td><span
+                                    class="{% if object.sabado == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td><span
+                                    class="{% if object.domingo == True %} text-success fas fa-check {% endif %}"></span>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group" aria-label="Acciones">
+                                    <a class="btn btn-primary" href="{% url 'editar' object.id %}">Editar</a>
+                                    <a class="btn btn-danger" href="{% url 'borrar' object.id %}">Borrar</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" href="{% url 'programar' %}">Programar Grabacion</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ basic-table ] end -->
+{% endblock tabla %}

@@ -1,0 +1,204 @@
+{% extends "capturaweb/layouts/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="col-xl-12">
+    <div class="card border-light shadow-sm">
+        <!-- [ breadcrumb ] start -->
+        {% block breadcrumb %}
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_general }}">{{ anterior }}</a></li>
+                            <li class="breadcrumb-item"><a href="">{{ title }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        {% endblock breadcrumb %}
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="card border-light shadow-sm">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% if errors %}
+                            <ul>
+                                {% for error in errors %}
+                                <div class="col-12 col-xl-8">
+                                    <div class="card card-body shadow-sm mb-4 alert alert-warning alert-dismissible fade show"
+                                         role="alert">
+                                        <h6>{{ error }}</h6>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="col-12 col-xl-8">
+                                <div class="card card-body shadow-sm mb-4 alert alert-{{ message.tags }} alert-dismissible fade show"
+                                     role="alert">
+                                    <h6>{{ message }}</h6>
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                            <form action="" method="POST" enctype="multipart/form-data" role="form">
+                                {% csrf_token %}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>{% block comentario %}{{ comentario }}{% endblock comentario %}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-sm-12">
+                                                <div class="row">
+                                                    <!-- [ Titulo Fecha y Hora ] -->
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label for="{{ form.titulo.id_for_label }}"
+                                                                   class="form-label">Título:</label>
+                                                            {{ form.titulo }}
+                                                        </div>
+                                                        <div class="row">
+<!--                                                            <div class="col-4">-->
+<!--                                                                <div class="form-group">-->
+<!--                                                                    <label for="{{ form.fecha.id_for_label }}"-->
+<!--                                                                           class="form-label">Fecha:</label>-->
+<!--                                                                    {{ form.fecha }}-->
+<!--                                                                </div>-->
+
+<!--                                                            </div>-->
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="{{ form.hora_inicio.id_for_label }}"
+                                                                           class="form-label">Hora
+                                                                        de inicio:</label>
+                                                                    {{ form.hora_inicio }}
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="{{ form.hora_fin.id_for_label }}"
+                                                                           class="form-label">Hora
+                                                                        de fin:</label>
+                                                                    {{ form.hora_fin }}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- [ Titulo Fecha y Hora ] fin -->
+                                                    <div class="col-lg-6">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                            <h6>Selecciones los dias de grabacion</h6>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.lunes.id_for_label }}"
+                                                                               class="form-label">Lunes:</label>
+                                                                        {{ form.lunes }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.martes.id_for_label }}"
+                                                                               class="form-label">Martes:</label>
+                                                                        {{ form.martes }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.miercoles.id_for_label }}"
+                                                                               class="form-label">Miercoles:</label>
+                                                                        {{ form.miercoles }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.jueves.id_for_label }}"
+                                                                               class="form-label">Jueves:</label>
+                                                                        {{ form.jueves }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.viernes.id_for_label }}"
+                                                                               class="form-label">Viernes:</label>
+                                                                        {{ form.viernes }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.sabado.id_for_label }}"
+                                                                               class="form-label">Sabado:</label>
+                                                                        {{ form.sabado }}
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="{{ form.domingo.id_for_label }}"
+                                                                               class="form-label">Domingo:</label>
+                                                                        {{ form.domingo }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label for="{{ form.convertida.id_for_label }}"
+                                                                       class="form-label">Convertir:</label>
+                                                                {{ form.convertida }}
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label for="{{ form.tipo_grabacion.id_for_label }}"
+                                                                       class="form-label">Tipo de
+                                                                    grabación:</label>
+                                                                {{ form.tipo_grabacion }}
+                                                                {{ form.segmento }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">{{ btn_accion }}</button>
+                                    <a href="{{ url_general }}" class="btn btn-secondary btn-flat"> Cancelar</a>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends "capturaweb/layouts/base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block scripst %}
+    <link rel="stylesheet"
+          href="{% static 'capturadora/librerias/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet"
+          href="{% static 'capturadora/librerias/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+    <script src="{% static 'capturadora/librerias/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'capturadora/librerias/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'capturadora/librerias/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'capturadora/librerias/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+{% endblock scripst %}
+
+{% block content %}
+    <!-- [ breadcrumb ] start -->
+    {% block breadcrumb %}{% endblock breadcrumb %}
+    <!-- [ breadcrumb ] end -->
+    {% block tabla %}{% endblock tabla %}
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script type="application/javascript">
+        $(function () {
+            $('#data').DataTable({
+                responsive: true,
+                autoWidth: false
+            });
+        });
+    </script>
+{% endblock javascripts %}
