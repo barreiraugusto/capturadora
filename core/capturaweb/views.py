@@ -162,8 +162,8 @@ scheduler = BackgroundScheduler()
 
 
 @receiver(post_migrate)
-def rehacer_schedule():
+def rehacer_schedule(**kwargs):
     grabaciones_programadas = GrabacionProgramada.objects.all()
     scheduler.remove_all_jobs()
     for grabacion in grabaciones_programadas:
-        programar_tarea_nueva(None, grabacion, True)
+        programar_tarea_nueva(None, grabacion, True, **kwargs)
