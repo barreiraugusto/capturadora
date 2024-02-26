@@ -2,6 +2,7 @@ import datetime
 import re
 import time
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.contrib import messages
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -11,7 +12,9 @@ from .conversor import Convertir
 from .datos_temp import guardar_datos, obtener_dato, eliminar_datos
 from .forms import DatosGrabacionForm, ProgramarGrabacionForm
 from .grabar import Captura
-from .models import DatosGrabadora, GrabacionProgramada
+from .models import DatosGrabadora
+from .models import GrabacionProgramada
+from .signals import programar_tarea_nueva
 
 
 class CapturaView(FormView):
@@ -152,3 +155,13 @@ class BorrarGrabacionView(DeleteView):
         context['btn_accion'] = 'Guardar'
         return context
 
+
+# Crea una nueva instancia del planificador
+scheduler = BackgroundScheduler()
+
+
+def rehacer_schedule():
+    grabaciones_programadas = GrabacionProgramada.objects.all()
+    scheduler.remove_all_jobs()
+    for grabacion in grabaciones_programadas:
+        programar_tarea_nueva(None, grabacion, True)

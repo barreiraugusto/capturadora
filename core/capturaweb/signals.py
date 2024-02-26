@@ -1,22 +1,25 @@
-import re
 import datetime
+import logging
+import re
 
-from apscheduler.schedulers.background import BackgroundScheduler
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-import logging
 
 from .datos_temp import guardar_datos
 
 logger = logging.getLogger('capturadora')
 
-
 from .conversor import Convertir
 from .grabar import Captura
 from .models import GrabacionProgramada
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.schedulers.background import BackgroundScheduler
 
-scheduler = BackgroundScheduler()
+# Configura el almacenamiento en una base de datos SQLite
+jobstore = {
+    'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
+}
+scheduler = BackgroundScheduler(jobstores=jobstore)
 
 
 @receiver(post_save, sender=GrabacionProgramada)
