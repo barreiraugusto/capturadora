@@ -164,5 +164,4 @@ def rehacer_schedule():
     grabaciones_programadas = GrabacionProgramada.objects.all()
     scheduler.remove_all_jobs()
     for grabacion in grabaciones_programadas:
-        print(grabacion)
-        # programar_tarea_nueva(None, grabacion, True)
+        programar_tarea_nueva(None, grabacion, True)
