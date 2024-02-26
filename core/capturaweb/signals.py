@@ -51,11 +51,11 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             if convertir == "True":
                 convertidor.para_convertir(titulo)
 
-        scheduler.add_job('capturaweb.signals.programar_tarea_nueva.inicar_grabacion', 'cron', day_of_week=instance.get_dias_semana(),
+        scheduler.add_job(inicar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_inicio.hour,
                           minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}")
 
-        scheduler.add_job('capturaweb.signals.programar_tarea_nueva.parar_grabacion', 'cron', day_of_week=instance.get_dias_semana(),
+        scheduler.add_job(parar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_fin.hour,
                           minute=instance.hora_fin.minute, id=f"parar_grabacion_{instance.id}")
 
