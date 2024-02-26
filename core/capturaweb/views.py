@@ -16,6 +16,7 @@ from .forms import DatosGrabacionForm, ProgramarGrabacionForm
 from .grabar import Captura
 from .models import DatosGrabadora
 from .models import GrabacionProgramada
+from .signals import programar_tarea_nueva
 
 
 class CapturaView(FormView):
@@ -157,7 +158,6 @@ class BorrarGrabacionView(DeleteView):
         return context
 
 
-# Crea una nueva instancia del planificador
 scheduler = BackgroundScheduler()
 
 
@@ -166,5 +166,4 @@ def rehacer_schedule():
     grabaciones_programadas = GrabacionProgramada.objects.all()
     scheduler.remove_all_jobs()
     for grabacion in grabaciones_programadas:
-        pass
-        # programar_tarea_nueva(None, grabacion, True)
+        programar_tarea_nueva(None, grabacion, True)
