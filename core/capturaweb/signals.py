@@ -61,11 +61,11 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
 
         scheduler.add_job(iniciar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_inicio.hour,
-                          minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}", args=instance)
+                          minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}", args=(instance,))
 
         scheduler.add_job(parar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_fin.hour,
-                          minute=instance.hora_fin.minute, id=f"parar_grabacion_{instance.id}", args=instance)
+                          minute=instance.hora_fin.minute, id=f"parar_grabacion_{instance.id}", args=(instance,))
 
         if not scheduler.running:
             scheduler.start()
