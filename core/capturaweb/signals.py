@@ -32,7 +32,7 @@ def iniciar_grabacion(instance):
     guardar_datos(titulo, instance.tipo_grabacion, instance.segmento, False,
                   instance.convertida, "00:00:00")
     if instance.tipo_grabacion == 2:
-        segmento = instance.segmemto
+        segmento = instance.segmento
         nueva_grabacion.para_captura_segmentada(titulo, segmento)
     elif instance.tipo_grabacion == 1:
         logger.debug(f'GRABAR - {titulo}')
