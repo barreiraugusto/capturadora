@@ -7,5 +7,3 @@ class CapturawebConfig(AppConfig):
 
     def ready(self):
         import core.capturaweb.signals
-        from .views import rehacer_schedule
-        rehacer_schedule()

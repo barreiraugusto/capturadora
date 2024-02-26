@@ -4,6 +4,8 @@ import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.contrib import messages
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
@@ -14,7 +16,6 @@ from .forms import DatosGrabacionForm, ProgramarGrabacionForm
 from .grabar import Captura
 from .models import DatosGrabadora
 from .models import GrabacionProgramada
-from .signals import programar_tarea_nueva
 
 
 class CapturaView(FormView):
@@ -160,6 +161,7 @@ class BorrarGrabacionView(DeleteView):
 scheduler = BackgroundScheduler()
 
 
+@receiver(post_migrate)
 def rehacer_schedule():
     grabaciones_programadas = GrabacionProgramada.objects.all()
     scheduler.remove_all_jobs()
