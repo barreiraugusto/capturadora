@@ -3,81 +3,87 @@
 {% block content %}
 <div class="col-xl-12">
     <div class="card border-light shadow-sm">
-    <div class="modal-content">
-        <div class="modal-body">
-            <div class="row">
-                <div class="container">
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                </div>
-                <div class="modal-title col-lg-8 col-sm-12">
-                    <h3>
-                        {% if ocupada %}
-                        <label class="text-danger">GRABANDO</label>
-                        <p class="text-truncate">{{ titulo.0 }}</p>
-                        {% else %}
-                        <label class="text-success" style="display: inline;">LISTA</label>
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="container">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
                         {% endif %}
-                    </h3>
-                </div>
+                    </div>
+                    <div class="modal-title col-lg-4 col-sm-12">
+                        <h3>
+                            {% if ocupada %}
+                            <label class="text-danger">GRABANDO</label>
+                            <p class="text-truncate">{{ titulo.0 }}</p>
+                            {% else %}
+                            <label class="text-success" style="display: inline;">LISTA</label>
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <div class="modal-title col-lg-4 col-sm-12">
+                        <video id="live-video" width="320" height="180" controls autoplay>
+                            <source src="{% url 'stream_url' %}" type="video/mp4">
+                            Tu navegador no soporta la reproducción de video.
+                        </video>
+                    </div>
 
-                <div class="modal-title text-center col-lg-3 col-sm-12">
-                    <p>TIEMPO DE GRABACION</p>
-                    <h1 id="tiempos-container" class="text-danger display-sm-4">00:00:00</h1>
-                </div>
+                    <div class="modal-title text-center col-lg-3 col-sm-12">
+                        <p>TIEMPO DE GRABACION</p>
+                        <h1 id="tiempos-container" class="text-danger display-sm-4">00:00:00</h1>
+                    </div>
 
-                <div class="modal-title text-center col-lg-1 col-sm-12">
-                    <p class="text-truncate">{{ grabadora.split.0 }}</p>
-                    <h1 class="display-2">{{ grabadora.split.1 }}</h1>
-                </div>
+                    <div class="modal-title text-center col-lg-1 col-sm-12">
+                        <p class="text-truncate">{{ grabadora.split.0 }}</p>
+                        <h1 class="display-2">{{ grabadora.split.1 }}</h1>
+                    </div>
 
+                </div>
+                <form method="post" action="/">
+                    {% csrf_token %}
+                    <div class="row modal-title">
+                        <div class="col-lg-6 col-sm-12 p-b-5">
+                            <div class=" mt-2">
+                                <div class="fieldWrapper">
+                                    {{ form.titulo.errors }}
+                                    {{ form.titulo.label_tag }}
+                                    {{ form.titulo }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12 p-b-5">
+                            <div class=" mt-2">
+                                <div class="fieldWrapper">
+                                    {{ form.convertida.errors }}
+                                    {{ form.convertida.label_tag }}
+                                    {{ form.convertida }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-12 p-b-5">
+                            <div class=" mt-2">
+                                <div class="fieldWrapper">
+                                    {{ form.tipo_grabacion.errors }}
+                                    {{ form.tipo_grabacion.label_tag }}
+                                    {{ form.tipo_grabacion }}
+                                    {{ form.segmento }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-danger" value="REC " name="rec">
+                        <input type="submit" class="btn btn-secondary" value="STOP " name="stop">
+                    </div>
+                </form>
             </div>
-            <form method="post" action="/">
-                {% csrf_token %}
-                <div class="row modal-title">
-                    <div class="col-lg-6 col-sm-12 p-b-5">
-                        <div class=" mt-2">
-                            <div class="fieldWrapper">
-                                {{ form.titulo.errors }}
-                                {{ form.titulo.label_tag }}
-                                {{ form.titulo }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-12 p-b-5">
-                        <div class=" mt-2">
-                            <div class="fieldWrapper">
-                                {{ form.convertida.errors }}
-                                {{ form.convertida.label_tag }}
-                                {{ form.convertida }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-12 p-b-5">
-                        <div class=" mt-2">
-                            <div class="fieldWrapper">
-                                {{ form.tipo_grabacion.errors }}
-                                {{ form.tipo_grabacion.label_tag }}
-                                {{ form.tipo_grabacion }}
-                                {{ form.segmento }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" class="btn btn-danger" value="REC " name="rec">
-                    <input type="submit" class="btn btn-secondary" value="STOP " name="stop">
-                </div>
-            </form>
+            {% include 'capturaweb/grabaciones_programadas.html' %}
         </div>
-        {% include 'capturaweb/grabaciones_programadas.html' %}
-    </div>
     </div>
 </div>
 {% endblock %}

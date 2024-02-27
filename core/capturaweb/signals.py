@@ -3,6 +3,7 @@ import logging
 import re
 
 from django.db.models.signals import post_save
+from django.dispatch import Signal
 from django.dispatch import receiver
 
 from .datos_temp import guardar_datos
@@ -15,7 +16,9 @@ from .models import GrabacionProgramada
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 
-# Configura el almacenamiento en una base de datos SQLite
+process_started = Signal()
+process_finished = Signal()
+
 jobstore = {
     'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
 }
@@ -31,6 +34,7 @@ def iniciar_grabacion(instance):
     titulo = re.sub(r'[/. ,]', '_', titulo_pos)
     guardar_datos(titulo, instance.tipo_grabacion, instance.segmento, False,
                   instance.convertida, "00:00:00")
+    process_started.send(sender=None)
     if instance.tipo_grabacion == 2:
         segmento = instance.segmento
         logger.debug(f'GRABAR SEGMENTADA - {titulo}')
@@ -50,6 +54,7 @@ def parar_grabacion(instance):
     titulo = re.sub(r'[/. ,]', '_', titulo_pos)
     convertir = instance.convertida
     nueva_grabacion.stop()
+    process_finished.send(sender=None)
     logger.debug(f'STOP - {titulo}')
     if convertir == "True":
         convertidor.para_convertir(titulo)

@@ -6,8 +6,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from django.contrib import messages
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 
 from .conversor import Convertir
@@ -94,6 +96,13 @@ class CapturaView(FormView):
         context['grabaciones_programadas'] = GrabacionProgramada.objects.all()
         return context
 
+
+@require_http_methods(["GET"])
+def stream_view(request):
+    # Suponiendo que tu servidor de transmisión es localhost y el puerto es 1935
+    # Ajusta esto según tu configuración
+    stream_url = "rtmp://localhost:1935/live/your_stream_key"
+    return HttpResponse(stream_url, content_type="video/mp4")
 
 class ProgramarGrabacion(CreateView):
     model = GrabacionProgramada
