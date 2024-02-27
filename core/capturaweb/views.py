@@ -101,7 +101,7 @@ class CapturaView(FormView):
 def stream_view(request):
     # Suponiendo que tu servidor de transmisión es localhost y el puerto es 1935
     # Ajusta esto según tu configuración
-    stream_url = "rtmp://localhost:1935/live"
+    stream_url = "rtmp://192.168.2.62:1935/live"
     return HttpResponse(stream_url, content_type="video/mp4")
 
 class ProgramarGrabacion(CreateView):
