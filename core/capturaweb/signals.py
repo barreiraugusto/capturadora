@@ -33,6 +33,7 @@ def iniciar_grabacion(instance):
                   instance.convertida, "00:00:00")
     if instance.tipo_grabacion == 2:
         segmento = instance.segmento
+        logger.debug(f'GRABAR SEGMENTADA - {titulo}')
         nueva_grabacion.para_captura_segmentada(titulo, segmento)
     elif instance.tipo_grabacion == 1:
         logger.debug(f'GRABAR - {titulo}')
@@ -57,7 +58,6 @@ def parar_grabacion(instance):
 @receiver(post_save, sender=GrabacionProgramada)
 def programar_tarea_nueva(sender, instance, created, **kwargs):
     if created:
-
         scheduler.add_job(iniciar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_inicio.hour,
                           minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}", args=(instance,))
