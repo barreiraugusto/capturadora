@@ -2,10 +2,9 @@ import datetime
 import logging
 import re
 
-from apscheduler.triggers.cron import CronTrigger
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django_apscheduler.models import DjangoJob
+from django_apscheduler import util
 
 from .conversor import Convertir
 from .datos_temp import guardar_datos
@@ -51,25 +50,25 @@ def parar_grabacion(instance):
 @receiver(post_save, sender=GrabacionProgramada)
 def programar_tarea_nueva(sender, instance, created, **kwargs):
     if created:
-        DjangoJob.objects.create(
-            name=f"iniciar_grabacion_{instance.id}",
-            job_state='SCHEDULED',
-            next_run_time=datetime.datetime.now(),
-            job_class_path=iniciar_grabacion(instance),
-            trigger=CronTrigger(day_of_week=instance.get_dias_semana(),
-                                hour=instance.hora_inicio.hour,
-                                minute=instance.hora_inicio.minute),
+        # Crear el trabajo para iniciar la grabación
+        util.get_scheduler().add_job(
+            iniciar_grabacion,
+            'cron',
+            day_of_week=instance.get_dias_semana(),
+            hour=instance.hora_inicio.hour,
+            minute=instance.hora_inicio.minute,
+            id=f"iniciar_grabacion_{instance.id}",
             args=(instance,)
         )
 
-        DjangoJob.objects.create(
-            name=f"parar_grabacion_{instance.id}",
-            job_state='SCHEDULED',
-            next_run_time=datetime.datetime.now(),
-            job_class_path=parar_grabacion(instance),
-            trigger=CronTrigger(day_of_week=instance.get_dias_semana(),
-                                hour=instance.hora_fin.hour,
-                                minute=instance.hora_fin.minute),
+        # Crear el trabajo para detener la grabación
+        util.get_scheduler().add_job(
+            parar_grabacion,
+            'cron',
+            day_of_week=instance.get_dias_semana(),
+            hour=instance.hora_fin.hour,
+            minute=instance.hora_fin.minute,
+            id=f"parar_grabacion_{instance.id}",
             args=(instance,)
         )
 
