@@ -2,9 +2,9 @@ import datetime
 import logging
 import re
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django_apscheduler import util
 
 from .conversor import Convertir
 from .datos_temp import guardar_datos
@@ -47,11 +47,14 @@ def parar_grabacion(instance):
         convertidor.para_convertir(titulo)
 
 
+scheduler = BackgroundScheduler()
+
+
 @receiver(post_save, sender=GrabacionProgramada)
 def programar_tarea_nueva(sender, instance, created, **kwargs):
     if created:
-        # Crear el trabajo para iniciar la grabación
-        util.get_scheduler().add_job(
+        # Agregar la tarea para iniciar la grabación
+        scheduler.add_job(
             iniciar_grabacion,
             'cron',
             day_of_week=instance.get_dias_semana(),
@@ -61,8 +64,8 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             args=(instance,)
         )
 
-        # Crear el trabajo para detener la grabación
-        util.get_scheduler().add_job(
+        # Agregar la tarea para detener la grabación
+        scheduler.add_job(
             parar_grabacion,
             'cron',
             day_of_week=instance.get_dias_semana(),
@@ -71,6 +74,10 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             id=f"parar_grabacion_{instance.id}",
             args=(instance,)
         )
+
+        # Iniciar el scheduler si no está ejecutándose
+        if not scheduler.running:
+            scheduler.start()
 
 # import datetime
 # import logging
