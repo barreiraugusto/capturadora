@@ -55,7 +55,7 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             name=f"iniciar_grabacion_{instance.id}",
             job_state='SCHEDULED',
             next_run_time=datetime.datetime.now(),
-            job_class_path='path.to.your.module.iniciar_grabacion',  # Adjust this path
+            job_class_path=iniciar_grabacion(instance),
             trigger=CronTrigger(day_of_week=instance.get_dias_semana(),
                                 hour=instance.hora_inicio.hour,
                                 minute=instance.hora_inicio.minute),
@@ -66,7 +66,7 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             name=f"parar_grabacion_{instance.id}",
             job_state='SCHEDULED',
             next_run_time=datetime.datetime.now(),
-            job_class_path='path.to.your.module.parar_grabacion',  # Adjust this path
+            job_class_path=parar_grabacion(instance),
             trigger=CronTrigger(day_of_week=instance.get_dias_semana(),
                                 hour=instance.hora_fin.hour,
                                 minute=instance.hora_fin.minute),
