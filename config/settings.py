@@ -119,6 +119,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -135,30 +137,30 @@ MESSAGE_TAGS = {
 
 LOGGING_LEVEL = 'DEBUG'  # (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': LOGGING_LEVEL,
-            'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'level': LOGGING_LEVEL,
-            'class': 'logging.FileHandler',
-            'filename': '/home/tecnica/CAPTURADORA/deploy/app/logs/django.log',
-        },
-    },
-    'loggers': {
-        'capturadora': {
-            'handlers': ['console', 'file'],
-            'level': LOGGING_LEVEL,
-            'propagate': True,
-        },
-        'apscheduler': {
-            'handlers': ['console', 'file'],
-            'level': LOGGING_LEVEL,
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': LOGGING_LEVEL,
+#             'class': 'logging.StreamHandler',
+#         },
+#         'file': {
+#             'level': LOGGING_LEVEL,
+#             'class': 'logging.FileHandler',
+#             'filename': '/home/tecnica/CAPTURADORA/deploy/app/logs/django.log',
+#         },
+#     },
+#     'loggers': {
+#         'capturadora': {
+#             'handlers': ['console', 'file'],
+#             'level': LOGGING_LEVEL,
+#             'propagate': True,
+#         },
+#         'apscheduler': {
+#             'handlers': ['console', 'file'],
+#             'level': LOGGING_LEVEL,
+#             'propagate': True,
+#         },
+#     },
+# }

@@ -32,6 +32,9 @@
 
     <title>{% block title %}{% endblock %}</title>
     <meta name="description" content="{% block description %}{% endblock %}"/>
+ <!-- Incluye la biblioteca de Video.js -->
+    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.11.4/video.js"></script>
     {% block head %} {% endblock %}
     <script>
         $(document).ready(function() {
@@ -45,20 +48,20 @@
         });
     </script>
 
-<!--    <script>-->
-<!--        document.addEventListener("DOMContentLoaded", function() {-->
-<!--            var processStartedListener = function() {-->
-<!--                location.reload();-->
-<!--            };-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var processStartedListener = function() {
+                location.reload();
+            };
 
-<!--            var processFinishedListener = function() {-->
-<!--                location.reload();-->
-<!--            };-->
+            var processFinishedListener = function() {
+                location.reload();
+            };
 
-<!--            django.jQuery('#some-element').on('process_started', processStartedListener);-->
-<!--            django.jQuery('#some-element').on('process_finished', processFinishedListener);-->
-<!--        });-->
-<!--    </script>-->
+            jQuery('#some-element').on('process_started', processStartedListener);
+            jQuery('#some-element').on('process_finished', processFinishedListener);
+        });
+    </script>
 
 </head>
 
