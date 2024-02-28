@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import FormView, CreateView, UpdateView, DeleteView, TemplateView, ListView
 
 from .conversor import Convertir
 from .datos_temp import guardar_datos, obtener_dato, eliminar_datos
@@ -97,6 +97,23 @@ class CapturaView(FormView):
         return context
 
 
+class GrabacionesProgramadasListView(ListView):
+    template_name = 'capturaweb/grabaciones_programadas.html'
+    model = GrabacionProgramada
+    success_url = reverse_lazy('capturaweb')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['anterior'] = 'Inicio'
+        context['url_general'] = reverse_lazy('capturaweb')
+        context['comentario'] = 'Programe una grabacion automatica'
+        context['title_table'] = 'Programadas'
+        context['segment'] = 'alumnos'
+        context['btn_accion'] = 'Guardar'
+        context['title'] = 'Programar'
+        print(context)
+        return context
+
 @require_http_methods(["GET"])
 def stream_view(request):
     # Suponiendo que tu servidor de transmisión es localhost y el puerto es 1935
@@ -104,11 +121,12 @@ def stream_view(request):
     stream_url = "rtmp://192.168.2.62:1935/live"
     return HttpResponse(stream_url, content_type="video/mp4")
 
+
 class ProgramarGrabacion(CreateView):
     model = GrabacionProgramada
     form_class = ProgramarGrabacionForm
     template_name = 'capturaweb/agregar_grabacion.html'
-    success_url = reverse_lazy('capturaweb')
+    success_url = reverse_lazy('grabaciones_programadas')
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -117,8 +135,8 @@ class ProgramarGrabacion(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['anterior'] = 'Inicio'
-        context['url_general'] = reverse_lazy('capturaweb')
+        context['anterior'] = 'Grabaciones Programadas'
+        context['url_general'] = reverse_lazy('grabaciones_programadas')
         context['comentario'] = 'Programe una grabacion automatica'
         context['title_table'] = 'Programadas'
         context['segment'] = 'alumnos'

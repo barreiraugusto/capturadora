@@ -3,109 +3,108 @@
 {% block content %}
 <div class="col-xl-12">
     <div class="card border-light shadow-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="container">
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
+        <div class="modal-body">
+            <div class="container">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-
-                <div class="row">
-                    <div class="modal-title text-center col-lg-2 col-sm-12">
-                        <p class="text-truncate">{{ grabadora.split.0 }}</p>
-                        <h2 class="display-3">{{ grabadora.split.1 }}</h2>
-                    </div>
-                    <div class="modal-title col-lg-10 col-sm-12">
-                        <h3>
-                            {% if ocupada %}
-                            <label class="text-danger">GRABANDO</label>
-                            <p class="text-truncate">{{ titulo.0 }}</p>
-                            {% else %}
-                            <label class="text-success" style="display: inline;">LISTA</label>
-                            {% endif %}
-                        </h3>
-                    </div>
-                </div>
-                <form method="post" action="/">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="modal-title col-lg-9 col-sm-12">
-                            <div class="row">
-                                <div class="col-lg-12 col-sm-12">
-                                    <!-- titulo -->
-                                    <div class="form-group">
-                                        {{ form.titulo.errors }}
-                                        {{ form.titulo.label_tag }}
-                                        {{ form.titulo }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <!-- convertir -->
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group">
-                                        {{ form.convertida.errors }}
-                                        {{ form.convertida.label_tag }}
-                                        {{ form.convertida }}
-                                    </div>
-                                </div>
-                                <!-- tipo de grabacion -->
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group">
-                                        {{ form.tipo_grabacion.errors }}
-                                        {{ form.tipo_grabacion.label_tag }}
-                                        {{ form.tipo_grabacion }}
-                                        {{ form.segmento }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--                        &lt;!&ndash; Agrega el reproductor de video &ndash;&gt;-->
-                        <!--                        <video id="videoElement" controls autoplay width="320" height="180"></video>-->
-
-                        <!--                        &lt;!&ndash; Incluye flv.js &ndash;&gt;-->
-                        <!--                        <script src="https://cdn.jsdelivr.net/npm/flv.js@1.6.2/dist/flv.min.js"></script>-->
-
-                        <!--                        <script>-->
-                        <!--                            if (flvjs.isSupported()) {-->
-                        <!--                                var videoElement = document.getElementById('videoElement');-->
-                        <!--                                var flvPlayer = flvjs.createPlayer({-->
-                        <!--                                    type: 'hls',-->
-                        <!--                                    url: 'http://192.168.2.62:8080/hls/stream.m3u8',-->
-                        <!--                                });-->
-                        <!--                                flvPlayer.attachMediaElement(videoElement);-->
-                        <!--                                flvPlayer.load();-->
-                        <!--                                flvPlayer.play();-->
-                        <!--                            } else {-->
-                        <!--                                console.error('flv.js no es compatible');-->
-                        <!--                            }-->
-                        <!--                        </script>-->
-
-
-                        <div class="modal-title text-center col-lg-3 col-sm-12">
-                            <p>TIEMPO DE GRABACION</p>
-                            <h1 id="tiempos-container" class="text-danger display-3">00:00:00</h1>
-                            <div>
-                                <input type="submit" class="btn btn-danger btn-lg mr-2" value="REC " name="rec">
-                                <input type="submit" class="btn btn-secondary btn-lg" value="STOP " name="stop">
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-
+                {% endfor %}
+                {% endif %}
             </div>
+
+            <div class="row">
+                <div class="modal-title text-center col-lg-2 col-sm-12">
+                    <p class="text-truncate">{{ grabadora.split.0 }}</p>
+                    <h2 class="display-3">{{ grabadora.split.1 }}</h2>
+                </div>
+                <div class="modal-title col-lg-10 col-sm-12">
+                    <h3>
+                        {% if ocupada %}
+                        <label class="text-danger">GRABANDO</label>
+                        <p class="text-truncate">{{ titulo.0 }}</p>
+                        {% else %}
+                        <label class="text-success" style="display: inline;">LISTA</label>
+                        {% endif %}
+                    </h3>
+                </div>
+            </div>
+            <form method="post" action="/">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="modal-title col-lg-9 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <!-- titulo -->
+                                <div class="form-group">
+                                    {{ form.titulo.errors }}
+                                    {{ form.titulo.label_tag }}
+                                    {{ form.titulo }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- convertir -->
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.convertida.errors }}
+                                    {{ form.convertida.label_tag }}
+                                    {{ form.convertida }}
+                                </div>
+                            </div>
+                            <!-- tipo de grabacion -->
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    {{ form.tipo_grabacion.errors }}
+                                    {{ form.tipo_grabacion.label_tag }}
+                                    {{ form.tipo_grabacion }}
+                                    {{ form.segmento }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                        &lt;!&ndash; Agrega el reproductor de video &ndash;&gt;-->
+                    <!--                        <video id="videoElement" controls autoplay width="320" height="180"></video>-->
+
+                    <!--                        &lt;!&ndash; Incluye flv.js &ndash;&gt;-->
+                    <!--                        <script src="https://cdn.jsdelivr.net/npm/flv.js@1.6.2/dist/flv.min.js"></script>-->
+
+                    <!--                        <script>-->
+                    <!--                            if (flvjs.isSupported()) {-->
+                    <!--                                var videoElement = document.getElementById('videoElement');-->
+                    <!--                                var flvPlayer = flvjs.createPlayer({-->
+                    <!--                                    type: 'hls',-->
+                    <!--                                    url: 'http://192.168.2.62:8080/hls/stream.m3u8',-->
+                    <!--                                });-->
+                    <!--                                flvPlayer.attachMediaElement(videoElement);-->
+                    <!--                                flvPlayer.load();-->
+                    <!--                                flvPlayer.play();-->
+                    <!--                            } else {-->
+                    <!--                                console.error('flv.js no es compatible');-->
+                    <!--                            }-->
+                    <!--                        </script>-->
+
+
+                    <div class="modal-title text-center col-lg-3 col-sm-12">
+                        <p>TIEMPO DE GRABACION</p>
+                        <h1 id="tiempos-container" class="text-danger display-3">00:00:00</h1>
+                        <div>
+                            <input type="submit" class="btn btn-danger btn-lg mr-2" value="REC " name="rec">
+                            <input type="submit" class="btn btn-secondary btn-lg" value="STOP " name="stop">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </div>
+        <div class="card-footer">
+            <a href="{% url 'grabaciones_programadas' %}" class="btn btn-primary btn-flat"> Grabacines Programadas</a>
+        </div>
+
     </div>
-</div>
-{% include 'capturaweb/grabaciones_programadas.html' %}
 </div>
 {% endblock %}
 {% block extrajs %}
@@ -123,7 +122,7 @@
                     for (var i = 0; i < data.tiempos.length; i++) {
                         contenidoHTML += data.tiempos[i];
                     }
-                    $('#tiempos-container').html('<p>' + contenidoHTML + '</p>');
+                    $('#tiempos-container').html(contenidoHTML);
                 }
             });
         }
