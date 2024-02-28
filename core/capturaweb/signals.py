@@ -76,7 +76,7 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             scheduler.start()
 
 
-@receiver(post_migrate)
+# @receiver(post_migrate)
 def rehacer_schedule(**kwargs):
     grabaciones_programadas = GrabacionProgramada.objects.all()
     scheduler.remove_all_jobs()
