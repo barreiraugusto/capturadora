@@ -1,0 +1,27 @@
+{% extends "capturaweb/layouts/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1>Grabaciones Programadas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Hora de Inicio</th>
+                <th>Hora de Fin</th>
+                <th>Días de la Semana</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grabacion in grabaciones %}
+            <tr>
+                <td>{{ grabacion.id }}</td>
+                <td>{{ grabacion.hour }}:{{ grabacion.minute }}</td>
+                <td>{{ grabacion.hora_fin }}</td>
+                <td>{{ grabacion.day_of_week }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

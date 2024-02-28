@@ -2,12 +2,13 @@ from django.urls import path
 
 from core.capturaweb.tiempo import get_tiempo
 from .views import CapturaView, ProgramarGrabacion, BorrarGrabacionView, UpdateGrabacionView, stream_view, \
-    GrabacionesProgramadasListView
+    GrabacionesProgramadasListView, GrabacionesProgramadasSchedulerListView
 
 urlpatterns = [
     path("", CapturaView.as_view(), name="capturaweb"),
     path("programar/", ProgramarGrabacion.as_view(), name="programar"),
     path("grabaciones_programadas/", GrabacionesProgramadasListView.as_view(), name="grabaciones_programadas"),
+    path("scheduler/", GrabacionesProgramadasSchedulerListView.as_view(), name="scheduler"),
     path("borrar/<pk>/", BorrarGrabacionView.as_view(), name="borrar"),
     path("editar/<pk>/", UpdateGrabacionView.as_view(), name="editar"),
     path("get_tiempo", get_tiempo, name="get_tiempo"),

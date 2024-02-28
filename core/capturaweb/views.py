@@ -2,15 +2,13 @@ import datetime
 import re
 import time
 
-from apscheduler.schedulers.background import BackgroundScheduler
 from django.contrib import messages
-from django.db.models.signals import post_migrate
-from django.dispatch import receiver
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, CreateView, UpdateView, DeleteView, TemplateView, ListView
+from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
 
 from .conversor import Convertir
 from .datos_temp import guardar_datos, obtener_dato, eliminar_datos
@@ -18,7 +16,6 @@ from .forms import DatosGrabacionForm, ProgramarGrabacionForm
 from .grabar import Captura
 from .models import DatosGrabadora
 from .models import GrabacionProgramada
-from .signals import programar_tarea_nueva
 
 
 class CapturaView(FormView):
@@ -111,8 +108,8 @@ class GrabacionesProgramadasListView(ListView):
         context['segment'] = 'alumnos'
         context['btn_accion'] = 'Guardar'
         context['title'] = 'Programar'
-        print(context)
         return context
+
 
 @require_http_methods(["GET"])
 def stream_view(request):
@@ -185,12 +182,32 @@ class BorrarGrabacionView(DeleteView):
         return context
 
 
-scheduler = BackgroundScheduler()
+class GrabacionesProgramadasSchedulerListView(ListView):
+    model = GrabacionProgramada
+    template_name = 'capturaweb/scheduler.html'  # Nombre de tu plantilla donde se mostrarán las grabaciones programadas
+    context_object_name = 'grabaciones'
 
+    def get_queryset(self):
+        # Aquí puedes obtener las grabaciones programadas del scheduler
+        # Puedes acceder a la instancia de BackgroundScheduler a través de tu módulo
+        # Si estás usando el mismo módulo donde tienes el scheduler, simplemente importa el scheduler desde allí
+        # Si el scheduler está definido en un módulo diferente, importa el scheduler desde ese módulo
+        # Por ejemplo, si el scheduler está definido en 'signals.py', puedes importarlo así:
+        from .signals import scheduler
 
-@receiver(post_migrate)
-def rehacer_schedule(**kwargs):
-    grabaciones_programadas = GrabacionProgramada.objects.all()
-    scheduler.remove_all_jobs()
-    for grabacion in grabaciones_programadas:
-        programar_tarea_nueva(None, grabacion, True, **kwargs)
+        # Obtén todos los trabajos programados del scheduler
+        jobs = scheduler.get_jobs()
+
+        # Si quieres acceder a la información de las grabaciones programadas
+        # Puedes filtrar los trabajos basados en su id o algún otro atributo
+        grabaciones_programadas = []
+        for job in jobs:
+            if job.id.startswith('iniciar_grabacion_') or job.id.startswith('parar_grabacion_'):
+                grabaciones_programadas.append(job)
+
+        return grabaciones_programadas
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        return context
