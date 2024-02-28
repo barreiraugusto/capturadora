@@ -184,30 +184,18 @@ class BorrarGrabacionView(DeleteView):
 
 class GrabacionesProgramadasSchedulerListView(ListView):
     model = GrabacionProgramada
-    template_name = 'capturaweb/scheduler.html'  # Nombre de tu plantilla donde se mostrarán las grabaciones programadas
+    template_name = 'capturaweb/scheduler.html'
     context_object_name = 'grabaciones'
 
     def get_queryset(self):
-        # Aquí puedes obtener las grabaciones programadas del scheduler
-        # Puedes acceder a la instancia de BackgroundScheduler a través de tu módulo
-        # Si estás usando el mismo módulo donde tienes el scheduler, simplemente importa el scheduler desde allí
-        # Si el scheduler está definido en un módulo diferente, importa el scheduler desde ese módulo
-        # Por ejemplo, si el scheduler está definido en 'signals.py', puedes importarlo así:
         from .signals import scheduler
-
-        # Obtén todos los trabajos programados del scheduler
         jobs = scheduler.get_jobs()
-
-        # Si quieres acceder a la información de las grabaciones programadas
-        # Puedes filtrar los trabajos basados en su id o algún otro atributo
         grabaciones_programadas = []
         for job in jobs:
             if job.id.startswith('iniciar_grabacion_') or job.id.startswith('parar_grabacion_'):
                 grabaciones_programadas.append(job)
-
         return grabaciones_programadas
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         return context

@@ -8,18 +8,16 @@
         <thead>
             <tr>
                 <th>Título</th>
-                <th>Hora de Inicio</th>
-                <th>Hora de Fin</th>
-                <th>Días de la Semana</th>
+                <th>Proximo Inicio</th>
+                <th>Estado</th>
             </tr>
         </thead>
         <tbody>
             {% for grabacion in grabaciones %}
             <tr>
                 <td>{{ grabacion.id }}</td>
-                <td>{{ grabacion.hour }}:{{ grabacion.minute }}</td>
-                <td>{{ grabacion.hora_fin }}</td>
-                <td>{{ grabacion.day_of_week }}</td>
+                <td>{{ grabacion.next_run_time }}</td>
+                <td>{{ grabacion.job_state }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_apscheduler',
     "core.capturaweb",
 ]
 
@@ -77,6 +78,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+
+SCHEDULER_CONFIG = {
+    'apscheduler.jobstores.default': {
+        'type': 'django_apscheduler.jobstores:DjangoJobStore'
     }
 }
 
@@ -133,7 +140,6 @@ MESSAGE_TAGS = {
     mensajes.WARNING: 'warning',
     mensajes.ERROR: 'danger',
 }
-
 
 LOGGING_LEVEL = 'DEBUG'  # (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
