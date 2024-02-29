@@ -81,12 +81,6 @@ DATABASES = {
     }
 }
 
-SCHEDULER_CONFIG = {
-    'apscheduler.jobstores.default': {
-        'type': 'django_apscheduler.jobstores:DjangoJobStore'
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
