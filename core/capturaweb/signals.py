@@ -1,18 +1,18 @@
 import datetime
-import logging
 import re
+import logging
 
-from apscheduler.schedulers.background import BackgroundScheduler
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from apscheduler.triggers.cron import CronTrigger
 
+from .models import GrabacionProgramada
+from .grabar import Captura
 from .conversor import Convertir
 from .datos_temp import guardar_datos
-from .grabar import Captura
-from .models import GrabacionProgramada
+from django_apscheduler.models import DjangoJob
 
 logger = logging.getLogger('capturadora')
-
 
 def iniciar_grabacion(instance):
     nueva_grabacion = Captura()
@@ -47,37 +47,31 @@ def parar_grabacion(instance):
         convertidor.para_convertir(titulo)
 
 
-scheduler = BackgroundScheduler()
-
-
 @receiver(post_save, sender=GrabacionProgramada)
 def programar_tarea_nueva(sender, instance, created, **kwargs):
     if created:
-        # Agregar la tarea para iniciar la grabación
-        scheduler.add_job(
-            iniciar_grabacion,
-            'cron',
-            day_of_week=instance.get_dias_semana(),
-            hour=instance.hora_inicio.hour,
-            minute=instance.hora_inicio.minute,
-            id=f"iniciar_grabacion_{instance.id}",
+        DjangoJob.objects.create(
+            name=f"iniciar_grabacion_{instance.id}",
+            job_state='SCHEDULED',
+            next_run_time=datetime.datetime.now(),
+            job_class_path='core.capturaweb.signals.iniciar_grabacion',
+            trigger=CronTrigger(day_of_week=instance.get_dias_semana(),
+                                hour=instance.hora_inicio.hour,
+                                minute=instance.hora_inicio.minute),
             args=(instance,)
         )
 
-        # Agregar la tarea para detener la grabación
-        scheduler.add_job(
-            parar_grabacion,
-            'cron',
-            day_of_week=instance.get_dias_semana(),
-            hour=instance.hora_fin.hour,
-            minute=instance.hora_fin.minute,
-            id=f"parar_grabacion_{instance.id}",
+        DjangoJob.objects.create(
+            name=f"parar_grabacion_{instance.id}",
+            job_state='SCHEDULED',
+            next_run_time=datetime.datetime.now(),
+            job_class_path='core.capturaweb.signals.parar_grabacion',
+            trigger=CronTrigger(day_of_week=instance.get_dias_semana(),
+                                hour=instance.hora_fin.hour,
+                                minute=instance.hora_fin.minute),
             args=(instance,)
         )
 
-        # Iniciar el scheduler si no está ejecutándose
-        if not scheduler.running:
-            scheduler.start()
 
 # import datetime
 # import logging
