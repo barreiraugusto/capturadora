@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 
 from django.contrib.messages import constants as mensajes
-from django_apscheduler.jobstores import DjangoJobStore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,14 +81,10 @@ DATABASES = {
     }
 }
 
-# SCHEDULER_CONFIG = {
-#     'apscheduler.jobstores.default': {
-#         'type': 'django_apscheduler.jobstores:DjangoJobStore'
-#     }
-# }
-
-SCHEDULER_JOBSTORES = {
-    'default': DjangoJobStore(),
+SCHEDULER_CONFIG = {
+    'apscheduler.jobstores.default': {
+        'type': 'django_apscheduler.jobstores:DjangoJobStore'
+    }
 }
 
 # Password validation
