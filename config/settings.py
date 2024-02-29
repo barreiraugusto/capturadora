@@ -82,11 +82,11 @@ DATABASES = {
     }
 }
 
-SCHEDULER_CONFIG = {
-    'apscheduler.jobstores.default': {
-        'type': 'django_apscheduler.jobstores:DjangoJobStore'
-    }
-}
+# SCHEDULER_CONFIG = {
+#     'apscheduler.jobstores.default': {
+#         'type': 'django_apscheduler.jobstores:DjangoJobStore'
+#     }
+# }
 
 SCHEDULER_JOBSTORES = {
     'default': DjangoJobStore(),
