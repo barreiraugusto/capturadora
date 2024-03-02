@@ -2,7 +2,7 @@ import datetime
 import logging
 import re
 
-from django.db.models.signals import post_save, post_migrate
+from django.db.models.signals import post_save
 from django.dispatch import Signal
 from django.dispatch import receiver
 
@@ -68,6 +68,7 @@ def parar_grabacion(instance):
 def programar_tarea_nueva(instance, created, **kwargs):
     print(f"Programar tera nueva {instance} <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     if created:
+        print(f"Created <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         scheduler.add_job(iniciar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_inicio.hour,
                           minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}", args=(instance,))
@@ -80,7 +81,7 @@ def programar_tarea_nueva(instance, created, **kwargs):
             scheduler.start()
 
 
-@receiver(post_migrate)
+# @receiver(post_migrate)
 def rehacer_schedule(**kwargs):
     grabaciones_programadas = GrabacionProgramada.objects.all()
 
