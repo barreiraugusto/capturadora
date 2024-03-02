@@ -137,30 +137,30 @@ MESSAGE_TAGS = {
 
 LOGGING_LEVEL = 'DEBUG'  # (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'level': LOGGING_LEVEL,
-#             'class': 'logging.StreamHandler',
-#         },
-#         'file': {
-#             'level': LOGGING_LEVEL,
-#             'class': 'logging.FileHandler',
-#             'filename': '/home/tecnica/CAPTURADORA/deploy/app/logs/django.log',
-#         },
-#     },
-#     'loggers': {
-#         'capturadora': {
-#             'handlers': ['console', 'file'],
-#             'level': LOGGING_LEVEL,
-#             'propagate': True,
-#         },
-#         'apscheduler': {
-#             'handlers': ['console', 'file'],
-#             'level': LOGGING_LEVEL,
-#             'propagate': True,
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.FileHandler',
+            'filename': '/home/tecnica/CAPTURADORA/deploy/app/logs/django.log',
+        },
+    },
+    'loggers': {
+        'capturadora': {
+            'handlers': ['console', 'file'],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+        'apscheduler': {
+            'handlers': ['console', 'file'],
+            'level': LOGGING_LEVEL,
+            'propagate': True,
+        },
+    },
+}
