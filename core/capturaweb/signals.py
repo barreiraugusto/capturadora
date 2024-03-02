@@ -6,6 +6,7 @@ from django.db.models.signals import post_save, post_migrate
 from django.dispatch import Signal
 from django.dispatch import receiver
 
+from config import settings
 from .datos_temp import guardar_datos
 
 logger = logging.getLogger('capturadora')
@@ -19,9 +20,12 @@ from apscheduler.schedulers.background import BackgroundScheduler
 process_started = Signal()
 process_finished = Signal()
 
+db_path = str(settings.DATABASES['default']['NAME'])
+
 jobstore = {
-    'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
+    'default': SQLAlchemyJobStore(url=f'sqlite:///{db_path}')
 }
+
 scheduler = BackgroundScheduler(jobstores=jobstore)
 
 
@@ -61,8 +65,8 @@ def parar_grabacion(instance):
 
 
 @receiver(post_save, sender=GrabacionProgramada)
-def programar_tarea_nueva(sender, instance, created, **kwargs):
-    print(f"Programar tera nueva {instance}")
+def programar_tarea_nueva(instance, created, **kwargs):
+    print(f"Programar tera nueva {instance} <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     if created:
         scheduler.add_job(iniciar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
                           hour=instance.hora_inicio.hour,
@@ -76,9 +80,15 @@ def programar_tarea_nueva(sender, instance, created, **kwargs):
             scheduler.start()
 
 
-# @receiver(post_migrate)
+@receiver(post_migrate)
 def rehacer_schedule(**kwargs):
     grabaciones_programadas = GrabacionProgramada.objects.all()
-    scheduler.remove_all_jobs()
+
+    if not scheduler.running:
+        scheduler.start()
+
+    for job in scheduler.get_jobs():
+        scheduler.remove_job(job.id)
+
     for grabacion in grabaciones_programadas:
-        programar_tarea_nueva(None, grabacion, True, **kwargs)
+        programar_tarea_nueva(grabacion, True, **kwargs)

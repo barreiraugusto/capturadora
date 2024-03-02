@@ -3,23 +3,49 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <h1>Grabaciones Programadas</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Proximo Inicio</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for grabacion in grabaciones %}
-            <tr>
-                <td>{{ grabacion.id }}</td>
-                <td>{{ grabacion.next_run_time }}</td>
-                <td>{{ grabacion.job_state }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="col-xl-12">
+    <div class="card border-light shadow-sm">
+        <!-- [ breadcrumb ] start -->
+        {% block breadcrumb %}
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ url_general }}">{{ anterior }}</a></li>
+                            <li class="breadcrumb-item"><a href="">{{ title }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        {% endblock breadcrumb %}
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <h1>Grabaciones Programadas</h1>
+            <table class="table table-hover" id="data">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Proximo Inicio</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for grabacion in grabaciones %}
+                <tr>
+                    <td>{{ grabacion.id }}</td>
+                    <td>{{ grabacion.next_run_time }}</td>
+                    <td>{{ grabacion.job_state }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
