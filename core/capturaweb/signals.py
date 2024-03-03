@@ -30,10 +30,12 @@ scheduler = BackgroundScheduler(jobstores=jobstore)
 
 
 def iniciar_grabacion(instance):
+
     nueva_grabacion = Captura()
     zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
     hora_arg = datetime.datetime.now(zona_hora)
     hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
+
     titulo_pos = f'{instance.titulo.upper()}_{hora}'
     titulo = re.sub(r'[/. ,]', '_', titulo_pos)
     guardar_datos(titulo, instance.tipo_grabacion, instance.segmento, False,
@@ -54,6 +56,7 @@ def parar_grabacion(instance):
     zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
     hora_arg = datetime.datetime.now(zona_hora)
     hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
+    logger.debug(f'PARA GRABACION - {hora}')
     titulo_pos = f'{instance.titulo.upper()}_{hora}'
     titulo = re.sub(r'[/. ,]', '_', titulo_pos)
     convertir = instance.convertida
