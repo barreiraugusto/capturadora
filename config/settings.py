@@ -143,6 +143,8 @@ MESSAGE_TAGS = {
 
 LOGGING_LEVEL = 'DEBUG'  # (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
+FILENAME = os.path.join(BASE_DIR.parent, 'deploy/app/logs/django.log')
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -154,7 +156,7 @@ LOGGING = {
         'file': {
             'level': LOGGING_LEVEL,
             'class': 'logging.FileHandler',
-            'filename': '/home/tecnica/CAPTURADORA/deploy/app/logs/django.log',
+            'filename': FILENAME,
         },
     },
     'loggers': {
