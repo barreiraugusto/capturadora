@@ -24,7 +24,7 @@
             <div class="card border-light shadow-sm">
                 <div class="card">
                     <div class="card-header">
-                        <h5>{{ title }}</h5>
+                        <h5>{{ title_table }}</h5>
                         <span class="d-block m-t-5">{{ object }}</span>
                         {% if errors %}
                             <ul>
@@ -68,6 +68,7 @@
                                     <th scope="col" style="width: 5%;">Vi</th>
                                     <th scope="col" style="width: 5%;">Sa</th>
                                     <th scope="col" style="width: 5%;">Do</th>
+                                    <th scope="col" style="width: 10%;">Activa</th>
                                     <th class="text-center" scope="col" style="width: 25%;">Opciones</th>
                                 </tr>
                                 </thead>
@@ -98,6 +99,9 @@
                                     </td>
                                     <td><span
                                             class="{% if object.domingo == True %} text-success fas fa-check {% endif %}"></span>
+                                    </td>
+                                    <td><span
+                                            class="{% if object.activa == True %} text-success fas fa-check {% else %}text-danger fas fa-cross{% endif %}"></span>
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group" role="group" aria-label="Acciones">

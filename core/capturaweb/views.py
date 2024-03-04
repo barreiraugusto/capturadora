@@ -104,7 +104,7 @@ class GrabacionesProgramadasListView(ListView):
         context['anterior'] = 'Inicio'
         context['url_general'] = reverse_lazy('capturaweb')
         context['comentario'] = 'Programe una grabacion automatica'
-        context['title_table'] = 'Programadas'
+        context['title_table'] = 'Grabaciones Programadas'
         context['segment'] = 'alumnos'
         context['btn_accion'] = 'Guardar'
         context['title'] = 'Programar'
@@ -146,7 +146,7 @@ class UpdateGrabacionView(UpdateView):
     model = GrabacionProgramada
     form_class = ProgramarGrabacionForm
     template_name = 'capturaweb/update_grabacion.html'
-    success_url = reverse_lazy('capturaweb')
+    success_url = reverse_lazy('grabaciones_programadas')
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -167,7 +167,7 @@ class UpdateGrabacionView(UpdateView):
 class BorrarGrabacionView(DeleteView):
     model = GrabacionProgramada
     template_name = 'capturaweb/borrar_grabacion.html'
-    success_url = reverse_lazy('capturaweb')
+    success_url = reverse_lazy('grabaciones_programadas')
 
     def get_grabacion(self):
         return GrabacionProgramada.objects.get(id=self.object.id)

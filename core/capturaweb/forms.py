@@ -38,7 +38,7 @@ class ProgramarGrabacionForm(forms.ModelForm):
     class Meta:
         model = GrabacionProgramada
         fields = ['titulo', 'hora_inicio', 'hora_fin', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes',
-                  'sabado', 'domingo', 'convertida', 'tipo_grabacion']
+                  'sabado', 'domingo', 'convertida', 'tipo_grabacion', 'activa']
         widgets = {
             'titulo': forms.TextInput(attrs={'class': 'form-control'}),
             'hora_inicio': forms.TimeInput(
@@ -76,6 +76,10 @@ class ProgramarGrabacionForm(forms.ModelForm):
                        'type': 'checkbox'
                        }),
             'domingo': forms.CheckboxInput(
+                attrs={'class': 'btn-check',
+                       'type': 'checkbox'
+                       }),
+            'activa': forms.CheckboxInput(
                 attrs={'class': 'btn-check',
                        'type': 'checkbox'
                        }),

@@ -37,6 +37,7 @@ class GrabacionProgramada(models.Model):
     domingo = models.BooleanField("Domingo", default=None)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    activa = models.BooleanField("Activa", default=True)
 
     def __str__(self):
         return f"{self.titulo} - {self.hora_inicio} a {self.hora_fin}"

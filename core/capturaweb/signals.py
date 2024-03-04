@@ -1,8 +1,9 @@
 import datetime
 import logging
 import re
+import time
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import Signal
 from django.dispatch import receiver
 
@@ -22,15 +23,14 @@ process_finished = Signal()
 
 db_path = str(settings.DATABASES['default']['NAME'])
 
-jobstore = {
-    'default': SQLAlchemyJobStore(url=f'sqlite:///{db_path}')
-}
+jobstore = SQLAlchemyJobStore(url=f'sqlite:///{db_path}')
 
-scheduler = BackgroundScheduler(jobstores=jobstore)
+jobstores = {'default': jobstore, }
+
+scheduler = BackgroundScheduler(jobstores=jobstores)
 
 
 def iniciar_grabacion(instance):
-
     nueva_grabacion = Captura()
     zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
     hora_arg = datetime.datetime.now(zona_hora)
@@ -67,26 +67,43 @@ def parar_grabacion(instance):
         convertidor.para_convertir(titulo)
 
 
+def agregar_tarea(instance):
+    scheduler.add_job(iniciar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
+                      hour=instance.hora_inicio.hour,
+                      minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}", args=(instance,))
+
+    scheduler.add_job(parar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
+                      hour=instance.hora_fin.hour,
+                      minute=instance.hora_fin.minute, id=f"parar_grabacion_{instance.id}", args=(instance,))
+
+
+def eliminar_tarea(instance):
+    scheduler.remove_job(f"iniciar_grabacion_{instance.id}")
+    scheduler.remove_job(f"parar_grabacion_{instance.id}")
+
+
 @receiver(post_save, sender=GrabacionProgramada)
 def programar_tarea_nueva(instance, created, **kwargs):
-    print(f"Programar tera nueva {instance} <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     if created:
-        print(f"Created <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-        scheduler.add_job(iniciar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
-                          hour=instance.hora_inicio.hour,
-                          minute=instance.hora_inicio.minute, id=f"iniciar_grabacion_{instance.id}", args=(instance,))
-
-        scheduler.add_job(parar_grabacion, 'cron', day_of_week=instance.get_dias_semana(),
-                          hour=instance.hora_fin.hour,
-                          minute=instance.hora_fin.minute, id=f"parar_grabacion_{instance.id}", args=(instance,))
-
+        agregar_tarea(instance)
         if not scheduler.running:
             scheduler.start()
+    if not created:
+        if instance.activa:
+            eliminar_tarea(instance)
+            agregar_tarea(instance)
+        else:
+            eliminar_tarea(instance)
 
 
-# @receiver(post_migrate)
+@receiver(post_delete, sender=GrabacionProgramada)
+def eliminar_tarea_al_eliminar_grabacion(sender, instance, **kwargs):
+    scheduler.remove_job(f"parar_grabacion_{instance.id}")
+    scheduler.remove_job(f"iniciar_grabacion_{instance.id}")
+
+
 def rehacer_schedule(**kwargs):
-    grabaciones_programadas = GrabacionProgramada.objects.all()
+    grabaciones_programadas_activas = GrabacionProgramada.objects.filter(activa=True)
 
     if not scheduler.running:
         scheduler.start()
@@ -94,5 +111,5 @@ def rehacer_schedule(**kwargs):
     for job in scheduler.get_jobs():
         scheduler.remove_job(job.id)
 
-    for grabacion in grabaciones_programadas:
+    for grabacion in grabaciones_programadas_activas:
         programar_tarea_nueva(grabacion, True, **kwargs)

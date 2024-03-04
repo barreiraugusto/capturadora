@@ -13,7 +13,7 @@ class DatosGrabadoraAdmin(admin.ModelAdmin):
 
 class GrabacionProgramadaAdmin(admin.ModelAdmin):
     list_display = ['titulo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes',
-                    'sabado', 'domingo', 'hora_inicio', 'hora_fin']
+                    'sabado', 'domingo', 'hora_inicio', 'hora_fin', 'activa', 'pk']
 
 
 admin.site.register(Grabacion, GrabacionAdmin)
