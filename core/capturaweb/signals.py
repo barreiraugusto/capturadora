@@ -103,13 +103,14 @@ def eliminar_tarea_al_eliminar_grabacion(sender, instance, **kwargs):
 
 
 def rehacer_schedule(**kwargs):
-    grabaciones_programadas_activas = GrabacionProgramada.objects.filter(activa=True)
-
-    if not scheduler.running:
-        scheduler.start()
-
-    for job in scheduler.get_jobs():
-        scheduler.remove_job(job.id)
-
-    for grabacion in grabaciones_programadas_activas:
-        programar_tarea_nueva(grabacion, True, **kwargs)
+    pass
+    # grabaciones_programadas_activas = GrabacionProgramada.objects.filter(activa=True)
+    #
+    # if not scheduler.running:
+    #     scheduler.start()
+    #
+    # for job in scheduler.get_jobs():
+    #     scheduler.remove_job(job.id)
+    #
+    # for grabacion in grabaciones_programadas_activas:
+    #     programar_tarea_nueva(grabacion, True, **kwargs)
