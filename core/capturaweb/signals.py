@@ -88,28 +88,31 @@ def programar_tarea_nueva(instance, created, **kwargs):
         agregar_tarea(instance)
         if not scheduler.running:
             scheduler.start()
-    if not created:
+    else:
         if instance.activa:
-            eliminar_tarea(instance)
-            agregar_tarea(instance)
+            for tarea_nombre in [f"iniciar_grabacion_{instance.id}", f"parar_grabacion_{instance.id}"]:
+                tarea = scheduler.get_job(tarea_nombre)
+                if tarea:
+                    if tarea.next_run_time is None:
+                        scheduler.resume_job(tarea_nombre)
+                    else:
+                        eliminar_tarea(instance)
+                        agregar_tarea(instance)
         else:
-            eliminar_tarea(instance)
+            for tarea_nombre in [f"iniciar_grabacion_{instance.id}", f"parar_grabacion_{instance.id}"]:
+                scheduler.pause_job(tarea_nombre)
 
 
 @receiver(post_delete, sender=GrabacionProgramada)
 def eliminar_tarea_al_eliminar_grabacion(sender, instance, **kwargs):
-    scheduler.remove_job(f"parar_grabacion_{instance.id}")
-    scheduler.remove_job(f"iniciar_grabacion_{instance.id}")
+    eliminar_tarea(instance)
 
 
 def rehacer_schedule(**kwargs):
     grabaciones_programadas_activas = GrabacionProgramada.objects.filter(activa=True)
-
     if not scheduler.running:
         scheduler.start()
-
     for job in scheduler.get_jobs():
         scheduler.remove_job(job.id)
-
     for grabacion in grabaciones_programadas_activas:
         programar_tarea_nueva(grabacion, True, **kwargs)

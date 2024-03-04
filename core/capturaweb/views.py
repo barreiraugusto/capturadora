@@ -156,7 +156,7 @@ class UpdateGrabacionView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['anterior'] = 'Inicio'
-        context['url_general'] = reverse_lazy('capturaweb')
+        context['url_general'] = reverse_lazy('grabaciones_programadas')
         context['comentario'] = 'Programe una grabacion automatica'
         context['title_table'] = 'Programadas'
         context['segment'] = 'alumnos'
