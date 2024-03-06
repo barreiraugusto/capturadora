@@ -27,17 +27,17 @@
                         <h5>{{ title_table }}</h5>
                         <span class="d-block m-t-5">{{ object }}</span>
                         {% if errors %}
-                            <ul>
-                                {% for error in errors %}
-                                <div class="col-12 col-xl-8">
-                                    <div class="card card-body shadow-sm mb-4 alert alert-warning alert-dismissible fade show"
-                                         role="alert">
-                                        <h6>{{ error }}</h6>
-                                    </div>
+                        <ul>
+                            {% for error in errors %}
+                            <div class="col-12 col-xl-8">
+                                <div class="card card-body shadow-sm mb-4 alert alert-warning alert-dismissible fade show"
+                                     role="alert">
+                                    <h6>{{ error }}</h6>
                                 </div>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
+                            </div>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                         {% if messages %}
                         {% for message in messages %}
                         <div class="col-12 col-xl-8">
@@ -80,25 +80,25 @@
                                     <td>{{ object.hora_inicio }}</td>
                                     <td>{{ object.hora_fin }}</td>
                                     <td><span
-                                            class="{% if object.lunes == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.lunes == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
-                                            class="{% if object.martes == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.martes == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
-                                            class="{% if object.miercoles == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.miercoles == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
-                                            class="{% if object.jueves == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.jueves == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
-                                            class="{% if object.viernes == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.viernes == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
-                                            class="{% if object.sabado == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.sabado == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
-                                            class="{% if object.domingo == True %} text-success fas fa-check {% endif %}"></span>
+                                            class="{% if object.domingo == True %} text-success fas fa-check {% else %} text-danger fas fa-ban{% endif %}"></span>
                                     </td>
                                     <td><span
                                             class="{% if object.activa == True %} text-success fas fa-check {% else %}text-danger fas fa-cross{% endif %}"></span>
