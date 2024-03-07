@@ -44,6 +44,8 @@ class GrabacionProgramada(models.Model):
 
     def clean(self):
         super(GrabacionProgramada, self).clean()
+
+        # Construir la consulta para verificar superposiciones
         consulta_superposiciones = Q()
         dias_semana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo']
 

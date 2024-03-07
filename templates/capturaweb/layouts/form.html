@@ -8,30 +8,52 @@
 <!-- Asegúrate de incluir jQuery antes de este script -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-      // Función para deshabilitar todos los campos del formulario excepto el checkbox "activa"
-      function actualizarEstadoCampos() {
-        if ($('#id_activa').prop('checked')) {
-          $('#miFormulario :input').prop('disabled', false);
-        } else {
-          $('#miFormulario :input').not('#id_activa').prop('disabled', true);
-        }
-      }
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--      var formulario = document.getElementById("miFormulario");--><!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--      var formulario = document.getElementById("miFormulario");-->
+<!--      var elementos = formulario.elements;-->
+<!--      var id_activa = document.getElementById("id_activa");-->
 
-      // Llama a la función al cargar la página para establecer el estado inicial
-      actualizarEstadoCampos();
+<!--      // Habilitar/deshabilitar elementos del formulario según el estado del checkbox al inicio-->
+<!--      toggleElements();-->
 
-      // Habilita los campos cuando el checkbox "activa" está marcado
-      $('#id_activa').change(function() {
-        if($(this).prop('checked')) {
-          $('#miFormulario :input').prop('disabled', false);
-        } else {
-          $('#miFormulario :input').not('#id_activa').prop('disabled', true);
-        }
-      });
-    });
-</script>
+<!--      // Añadir event listener al checkbox para habilitar/deshabilitar elementos del formulario-->
+<!--      id_activa.addEventListener("change", toggleElements);-->
+
+<!--      function toggleElements() {-->
+<!--        for (var i = 0; i < elementos.length; i++) {-->
+<!--          var element = elementos[i];-->
+<!--          // Excluir el campo CSRF de la lógica de deshabilitar elementos-->
+<!--          if (element !== id_activa && element.name !== "csrfmiddlewaretoken" && element.type !== "submit") {-->
+<!--            element.disabled = !id_activa.checked;-->
+<!--          }-->
+<!--        }-->
+<!--      }-->
+<!--    });-->
+<!--</script>-->
+<!--      var elementos = formulario.elements;-->
+<!--      var id_activa = document.getElementById("id_activa");-->
+
+<!--      // Habilitar/deshabilitar elementos del formulario según el estado del checkbox al inicio-->
+<!--      toggleElements();-->
+
+<!--      // Añadir event listener al checkbox para habilitar/deshabilitar elementos del formulario-->
+<!--      id_activa.addEventListener("change", toggleElements);-->
+
+<!--      function toggleElements() {-->
+<!--        for (var i = 0; i < elementos.length; i++) {-->
+<!--          var element = elementos[i];-->
+<!--          // Excluir el campo CSRF de la lógica de deshabilitar elementos-->
+<!--          if (element !== id_activa && element.name !== "csrfmiddlewaretoken" && element.type !== "submit") {-->
+<!--            element.disabled = !id_activa.checked;-->
+<!--          }-->
+<!--        }-->
+<!--      }-->
+<!--    });-->
+<!--</script>-->
+
 
 {% endblock extra-script %}
 {% block content %}
