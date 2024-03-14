@@ -74,6 +74,7 @@ class Captura:
         while True:
             time.sleep(.5)
             if self.capturarlo:
+                self.crear_directorio_captura()
                 capturadora = self.get_datos_capturadora()
                 self.capturarlo = False
                 capturando = self.en_proceso()
@@ -96,6 +97,7 @@ class Captura:
         while True:
             time.sleep(.5)
             if self.capturarlo_seg:
+                self.crear_directorio_captura()
                 capturadora = self.get_datos_capturadora()
                 self.capturarlo_seg = False
                 capturando = self.en_proceso()
