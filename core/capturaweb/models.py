@@ -80,3 +80,4 @@ class GrabacionProgramada(models.Model):
         if self.domingo:
             dias.append('sun')
         return ",".join(dias)
+

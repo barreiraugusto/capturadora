@@ -1,9 +1,12 @@
 import subprocess
 import threading
 import time
+import logging
 from datetime import date, datetime
 
 from core.capturaweb.models import DatosGrabadora
+
+logger = logging.getLogger('capturadora')
 
 
 class Convertir:
@@ -35,7 +38,7 @@ class Convertir:
                 try:
                     self.ejecutar_ffmpeg()
                 except Exception as e:
-                    print(f"Error al convertir: {str(e)}")
+                    logger.debug(f"ERROR AL CONVERTIR - {str(e)}")
 
     def ejecutar_ffmpeg(self):
         capturadora = self.get_datos_capturadora()

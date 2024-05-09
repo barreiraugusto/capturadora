@@ -1,6 +1,7 @@
 import datetime
 import re
 import time
+import logging
 
 from django.contrib import messages
 from django.http import HttpResponse
@@ -13,9 +14,10 @@ from django.views.generic import ListView
 from .conversor import Convertir
 from .datos_temp import guardar_datos, obtener_dato, eliminar_datos
 from .forms import DatosGrabacionForm, ProgramarGrabacionForm
-from .grabar import Captura
-from .models import DatosGrabadora
-from .models import GrabacionProgramada
+from .grabacion import Captura
+from .models import DatosGrabadora, Grabacion, GrabacionProgramada
+
+logger = logging.getLogger('capturadora')
 
 
 class CapturaView(FormView):
@@ -35,31 +37,26 @@ class CapturaView(FormView):
     def form_valid(self, form):
         global context
         data = form.cleaned_data
-        zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
-        hora_arg = datetime.datetime.now(zona_hora)
-        ocupada = self.grabacion.en_proceso()
+        #zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
+        hora_arg = datetime.datetime.now()
+        ocupada = self.grabacion.pid_proceso()
         hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
-        titulo_pos = f'{data.get("titulo").upper()}_{hora}'
+        titulo_pos = f'{data.get("titulo").upper()}'
         titulo = re.sub(r'[/. ,]', '_', titulo_pos)
 
         if 'rec' in self.request.POST:
-            tipo_grabacion = data.get("tipo_grabacion")
             if ocupada:
                 titulo = obtener_dato(self.path_temp, "titulo")
                 messages.error(self.request,
                                f'La grabacion {titulo} está en curso.\n Deténgala antes de comenzar una nueva grabación')
             else:
-                if tipo_grabacion == "2":
-                    segmento = data.get("segmento")
-                    guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
-                                  data.get("convertida"), "00:00:00")
-                    self.grabacion.para_captura_segmentada(titulo, segmento)
-                elif tipo_grabacion == "1":
-                    guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
-                                  data.get("convertida"), "00:00:00")
-                    self.grabacion.para_capturar(titulo)
+                guardar_datos(titulo, data.get("tipo_grabacion"), data.get("segmento"), False,
+                              data.get("convertida"), "00:00:00")
+                nueva_grabacion = Grabacion(titulo=titulo, duracion=datetime.timedelta(hours=0, minutes=0, seconds=0))
+                nueva_grabacion.save()
+                logger.debug(f"INICIO DE CAPTURA CONTINUA MANUAL - {titulo}")
             time.sleep(2)
-            ocupada = self.grabacion.en_proceso()
+            ocupada = self.grabacion.pid_proceso()
             context = self.get_context_data(form=form, ocupada=ocupada, titulo=titulo)
         elif 'stop' in self.request.POST:
             convertir = data.get("convertida")
@@ -76,7 +73,7 @@ class CapturaView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ocupada = self.grabacion.en_proceso()
+        ocupada = self.grabacion.pid_proceso()
         if ocupada:
             context['ocupada'] = True
             obtener_dato(self.path_temp, 'titulo')
@@ -113,8 +110,6 @@ class GrabacionesProgramadasListView(ListView):
 
 @require_http_methods(["GET"])
 def stream_view(request):
-    # Suponiendo que tu servidor de transmisión es localhost y el puerto es 1935
-    # Ajusta esto según tu configuración
     stream_url = "rtmp://192.168.2.62:1935/live"
     return HttpResponse(stream_url, content_type="video/mp4")
 

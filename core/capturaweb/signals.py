@@ -13,8 +13,8 @@ from .datos_temp import guardar_datos
 logger = logging.getLogger('capturadora')
 
 from .conversor import Convertir
-from .grabar import Captura
-from .models import GrabacionProgramada
+from .grabacion import Captura
+from .models import GrabacionProgramada, Grabacion
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -23,7 +23,9 @@ process_finished = Signal()
 
 db_path = str(settings.DATABASES['default']['NAME'])
 
-jobstore = SQLAlchemyJobStore(url=f'sqlite:///{db_path}')
+db_url = 'postgresql://postgres:$rtfm01@localhost/postgres'
+
+jobstore = SQLAlchemyJobStore(url=db_url)
 
 jobstores = {'default': jobstore, }
 
@@ -35,19 +37,12 @@ def iniciar_grabacion(instance):
     zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
     hora_arg = datetime.datetime.now(zona_hora)
     hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
-
     titulo_pos = f'{instance.titulo.upper()}_{hora}'
     titulo = re.sub(r'[/. ,]', '_', titulo_pos)
-    guardar_datos(titulo, instance.tipo_grabacion, instance.segmento, False,
-                  instance.convertida, "00:00:00")
+    guardar_datos(titulo, instance.tipo_grabacion, instance.segmento, False, instance.convertida, "00:00:00")
     process_started.send(sender=None)
-    if instance.tipo_grabacion == 2:
-        segmento = instance.segmento
-        logger.debug(f'GRABAR SEGMENTADA - {titulo}')
-        nueva_grabacion.para_captura_segmentada(titulo, segmento)
-    elif instance.tipo_grabacion == 1:
-        logger.debug(f'GRABAR - {titulo}')
-        nueva_grabacion.para_capturar(titulo)
+    logger.debug(f'GRABAR PROGRAMADA - {titulo}')
+    nueva_grabacion.para_capturar(instance)
 
 
 def parar_grabacion(instance):
@@ -56,7 +51,7 @@ def parar_grabacion(instance):
     zona_hora = datetime.timezone(datetime.timedelta(hours=-3))
     hora_arg = datetime.datetime.now(zona_hora)
     hora = str(hora_arg.hour) + "h" + str(hora_arg.minute) + "m"
-    logger.debug(f'PARA GRABACION - {hora}')
+    logger.debug(f'PARAR GRABACION PROGRAMADA - {hora}')
     titulo_pos = f'{instance.titulo.upper()}_{hora}'
     titulo = re.sub(r'[/. ,]', '_', titulo_pos)
     convertir = instance.convertida
@@ -116,3 +111,10 @@ def rehacer_schedule(**kwargs):
         scheduler.remove_job(job.id)
     for grabacion in grabaciones_programadas_activas:
         programar_tarea_nueva(grabacion, True, **kwargs)
+
+
+@receiver(post_save, sender=Grabacion)
+def iniciar_grabacion_manual(sender, instance, created, **kwargs):
+    logger.debug("DISPARA EL RECEIVER INICIAR_GRABACION()")
+    nueva_grabacion = Captura()
+    nueva_grabacion.para_capturar(instance)
